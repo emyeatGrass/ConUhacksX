@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4plbnjo1issc"]
+
+[ext_resource type="Texture2D" uid="uid://ckww4jjcr4t2t" path="res://assets/characters/TruckBlue.png" id="1_mi5g6"]
+
+[node name="TruckBlue" type="CharacterBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(32, 16)
+texture = ExtResource("1_mi5g6")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(32, 16)
+polygon = PackedVector2Array(-16, -16, 30, -16, 32, -14, 32, 5, 30, 5, 31, 9, 30, 9, 30, 12, 28, 13, 28, 14, 27, 16, 24, 16, 22, 15, 22, 13, 2, 13, 2, 15, 1, 16, -3, 16, -4, 14, -4, 12, -21, 12, -21, 14, -22, 16, -26, 16, -27, 14, -27, 13, -29, 13, -32, 11, -32, -7, -24, -15, -16, -15)

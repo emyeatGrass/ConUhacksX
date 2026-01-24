@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://dk4k2qfnbxd1"]
+
+[ext_resource type="Texture2D" uid="uid://c5pbr525pl83c" path="res://assets/characters/CarRed.png" id="1_rq2rp"]
+
+[node name="CarRed" type="CharacterBody2D"]
+
+[node name="CarRed" type="Sprite2D" parent="."]
+position = Vector2(24, 14)
+texture = ExtResource("1_rq2rp")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(18, 1, 32, 1, 38, 8, 45, 8, 48, 11, 48, 22, 43, 24, 43, 26, 42, 27, 38, 27, 37, 26, 37, 23, 13, 23, 13, 26, 12, 27, 8, 27, 7, 26, 7, 24, 7, 23, 2, 23, 0, 21, 0, 12, 4, 8, 10, 8)
