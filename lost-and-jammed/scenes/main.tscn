@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://cisnpfd6jeyta" path="res://assets/tilesets/plains.png" id="2_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://iom58ppd8fth" path="res://assets/tilesets/objects.png" id="3_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://dwf7rucatbne" path="res://scenes/car_blue.tscn" id="4_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://bc7h7p2w1qrxo" path="res://scenes/player.tscn" id="5_tefeu"]
-[ext_resource type="Script" uid="uid://mbfkkcxfd8fm" path="res://scenes/spawn_manager.gd" id="6_o6xl0"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="5_tefeu"]
+[ext_resource type="Script" uid="uid://mbfkkcxfd8fm" path="res://scripts/spawn_manager.gd" id="6_o6xl0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tefeu"]
 texture = ExtResource("1_sugp2")
@@ -907,7 +907,6 @@ layer_1/tile_data = PackedInt32Array(6, 393218, 7, 65542, 393218, 8, 7, 458754, 
 
 [node name="CarBlue" parent="." instance=ExtResource("4_jyhfs")]
 position = Vector2(784, 78)
-scale = Vector2(1.715, 1.715)
 
 [node name="Player" parent="." instance=ExtResource("5_tefeu")]
 position = Vector2(360, 219)
