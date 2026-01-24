@@ -2,13 +2,19 @@ extends CharacterBody2D
 
 @onready var _animated_sprite = $AnimatedSprite2D
 
-const SPEED = 300.0
+const SPEED = 100.0
 var last_direction;
 const direction_to_idle = {
 	"right": "idle_side",
 	"left": "idle_side",
 	"up": "idle_up",
 	"down": "idle_down"
+}
+const direction_to_run = {
+	"right": "run_side",
+	"left": "run_side",
+	"up": "run_up",
+	"down": "run_down"
 }
 
 func _process(delta: float) -> void:
@@ -24,7 +30,8 @@ func _process(delta: float) -> void:
 		last_direction = "down";
 
 	if (last_direction != null):
-		_animated_sprite.play(direction_to_idle[last_direction]);
+		var animation = direction_to_idle[last_direction] if velocity == Vector2.ZERO else direction_to_run[last_direction]
+		_animated_sprite.play(animation);
 
 func _physics_process(delta: float) -> void:
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
