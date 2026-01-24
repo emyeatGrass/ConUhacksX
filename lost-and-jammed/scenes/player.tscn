@@ -157,6 +157,7 @@ script = ExtResource("1_g2els")
 shape = SubResource("RectangleShape2D_3vyb7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_60mlk")
 animation = &"idle_down"
