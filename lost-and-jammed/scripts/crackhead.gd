@@ -8,7 +8,7 @@ const GameServices = preload("res://scripts/shared/game_services.gd")
 @export var knockback_duration_s: float = 0.15
 @export var spawn_pause_s: float = 0.0: set = _set_spawn_pause_s
 
-@onready var player: Node2D = GameServices.get_player(get_tree())
+var player: Node2D = null
 @onready var _screen_notifier: VisibleOnScreenNotifier2D = $VisibleOnScreenNotifier2D
 @onready var audio_manager: Node = GameServices.get_audio_manager(get_tree())
 
@@ -43,6 +43,7 @@ func apply_knockback(knock_dir: Vector2) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	player = _get_nearest_alive_player()
 	if player == null:
 		return
 
@@ -104,14 +105,16 @@ func _check_player_touch() -> void:
 			return
 
 
-func hit_by_coin() -> void:
+func hit_by_coin(source_player: Node2D = null) -> void:
 	# Getting hit by a coin ends the grace period (if any) and makes the crackhead friendly.
 	if _friendly:
 		return
 	_spawn_pause_left_s = 0.0
 	_friendly = true
 	_fleeing = true
-	player.call("heal_hp", 10)
+	var healer: Node2D = source_player if source_player != null else player
+	if healer != null and healer.has_method("heal_hp"):
+		healer.call("heal_hp", 10)
 	if audio_manager and audio_manager.has_method("play_enemy_hit"):
 		audio_manager.call("play_enemy_hit")
 
@@ -119,3 +122,18 @@ func hit_by_coin() -> void:
 func _on_screen_exited() -> void:
 	if _fleeing:
 		queue_free()
+
+func _get_nearest_alive_player() -> Node2D:
+	var best: Node2D = null
+	var best_d2 := INF
+	for n in get_tree().get_nodes_in_group(&"Player"):
+		if not (n is Node2D):
+			continue
+		var p := n as Node2D
+		if p.has_method("is_downed") and bool(p.call("is_downed")):
+			continue
+		var d2 := global_position.distance_squared_to(p.global_position)
+		if d2 < best_d2:
+			best_d2 = d2
+			best = p
+	return best

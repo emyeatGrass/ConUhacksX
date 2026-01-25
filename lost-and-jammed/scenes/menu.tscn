@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_menu"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(420, 220)
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/Panel"]
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="CenterContainer/Panel/VBox"]
+text = "Lost and Jammed"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 36
+
+[node name="Subtitle" type="Label" parent="CenterContainer/Panel/VBox"]
+text = "Choose a mode"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
+
+[node name="Spacer" type="Control" parent="CenterContainer/Panel/VBox"]
+custom_minimum_size = Vector2(0, 8)
+
+[node name="SingleplayerButton" type="Button" parent="CenterContainer/Panel/VBox"]
+unique_name_in_owner = true
+text = "Singleplayer"
+
+[node name="MultiplayerButton" type="Button" parent="CenterContainer/Panel/VBox"]
+unique_name_in_owner = true
+text = "2 Player Co-op"
+

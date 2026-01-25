@@ -14,7 +14,7 @@ signal run_finished
 
 var _ground: TileMapLayer
 var _objects: TileMapLayer
-var _player: Node2D
+var _players: Array[Node2D] = []
 
 var _base_origin: Vector2i
 var _chunk_height_cells: int = 0
@@ -32,13 +32,15 @@ func _ready() -> void:
 	_ground = get_node_or_null(ground_layer_path) as TileMapLayer
 	_objects = get_node_or_null(objects_layer_path) as TileMapLayer
 
+	_players = _get_players_sorted()
+	# Back-compat: allow explicit player_path (useful for singleplayer scenes).
 	if player_path != NodePath():
-		_player = get_node_or_null(player_path) as Node2D
-	if _player == null:
-		_player = GameServices.get_player(get_tree())
+		var p := get_node_or_null(player_path) as Node2D
+		if p != null and not _players.has(p):
+			_players.insert(0, p)
 
-	if _ground == null or _objects == null or _player == null:
-		push_warning("MapRegenerator: Missing nodes (ground=%s objects=%s player=%s)" % [_ground, _objects, _player])
+	if _ground == null or _objects == null or _players.is_empty():
+		push_warning("MapRegenerator: Missing nodes (ground=%s objects=%s players=%s)" % [_ground, _objects, _players.size()])
 		set_process(false)
 		return
 
@@ -59,10 +61,11 @@ func _ready() -> void:
 
 func get_current_chunk_index() -> int:
 	# 0 = starting chunk (the one authored in the scene).
-	if _objects == null or _player == null or _chunk_height_cells <= 0:
+	var ref := _get_reference_player()
+	if _objects == null or ref == null or _chunk_height_cells <= 0:
 		return 0
 
-	var player_local := _objects.to_local(_player.global_position)
+	var player_local := _objects.to_local(ref.global_position)
 	var cell: Vector2i = _objects.local_to_map(player_local)
 
 	# Chunk 0 starts at _base_origin.y and extends downward +_chunk_height_cells.
@@ -103,11 +106,14 @@ func _compute_row_step_global_y() -> float:
 func _process(_delta: float) -> void:
 	if _ended:
 		return
-	if _player == null or _objects == null:
+	if _objects == null:
+		return
+	var ref := _get_reference_player()
+	if ref == null:
 		return
 
 	# Convert player's global position into the tilemap's map coordinates.
-	var player_local := _objects.to_local(_player.global_position)
+	var player_local := _objects.to_local(ref.global_position)
 	var player_cell: Vector2i = _objects.local_to_map(player_local)
 
 	# Highest generated chunk index (0-based).
@@ -122,7 +128,9 @@ func _process(_delta: float) -> void:
 	# After the last chunk is generated, end once the player goes beyond its top.
 	if _generated_chunks >= total_chunks:
 		var final_top_y := _base_origin.y - (_chunk_height_cells * (total_chunks - 1))
-		if player_cell.y <= (final_top_y - end_buffer_rows):
+		var threshold_y := (final_top_y - end_buffer_rows)
+		# Multiplayer: all alive players must reach the finish threshold.
+		if _all_alive_players_at_or_beyond(threshold_y):
 			_end_run()
 
 
@@ -144,10 +152,12 @@ func _end_run() -> void:
 		return
 	_ended = true
 
-	# Freeze player as a placeholder "end".
-	if _player != null:
-		_player.set_physics_process(false)
-		_player.set_process(false)
+	# Freeze all alive players as a placeholder "end".
+	for p in _get_players_sorted():
+		if p.has_method("is_downed") and bool(p.call("is_downed")):
+			continue
+		p.set_physics_process(false)
+		p.set_process(false)
 
 	_show_end_overlay()
 	run_finished.emit()
@@ -198,14 +208,55 @@ func reset_run() -> void:
 			end_label.queue_free()
 
 	# If the run had ended, the player was frozen in `_end_run()`; unfreeze it.
-	if _player != null:
-		_player = GameServices.get_player(get_tree()) if _player == null else _player
-	if _player != null and _player.has_method("set_process") and _player.has_method("set_physics_process"):
-		# Only unfreeze if we were previously ended.
-		_player.set_process(true)
-		_player.set_physics_process(true)
+	for p in _get_players_sorted():
+		if p.has_method("set_process") and p.has_method("set_physics_process"):
+			p.set_process(true)
+			p.set_physics_process(true)
 
 	set_process(true)
+
+func _get_players_sorted() -> Array[Node2D]:
+	var out: Array[Node2D] = []
+	for n in get_tree().get_nodes_in_group(&"Player"):
+		if n is Node2D:
+			out.append(n as Node2D)
+	out.sort_custom(func(a: Node2D, b: Node2D) -> bool:
+		var ida := int(a.get("player_id")) if a.get("player_id") != null else 0
+		var idb := int(b.get("player_id")) if b.get("player_id") != null else 0
+		if ida != idb:
+			return ida < idb
+		return a.name < b.name
+	)
+	return out
+
+func _get_reference_player() -> Node2D:
+	# Use the leading alive player (smallest map Y) as the reference for generation/offset.
+	if _objects == null:
+		return null
+	var best: Node2D = null
+	var best_y := INF
+	for p in _get_players_sorted():
+		if p.has_method("is_downed") and bool(p.call("is_downed")):
+			continue
+		var p_local := _objects.to_local(p.global_position)
+		var p_cell: Vector2i = _objects.local_to_map(p_local)
+		if float(p_cell.y) < best_y:
+			best_y = float(p_cell.y)
+			best = p
+	return best
+
+func _all_alive_players_at_or_beyond(threshold_y: int) -> bool:
+	# Returns true when every currently-alive player has crossed the finish threshold.
+	var any_alive := false
+	for p in _get_players_sorted():
+		if p.has_method("is_downed") and bool(p.call("is_downed")):
+			continue
+		any_alive = true
+		var p_local := _objects.to_local(p.global_position)
+		var p_cell: Vector2i = _objects.local_to_map(p_local)
+		if p_cell.y > threshold_y:
+			return false
+	return any_alive
 
 func _clear_layer(layer: TileMapLayer) -> void:
 	# TileMapLayer doesn't have a guaranteed fast "clear" across versions, so do it explicitly.

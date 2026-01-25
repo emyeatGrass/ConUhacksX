@@ -32,17 +32,39 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="PlayersHBox" type="HBoxContainer" parent="MarginContainer"]
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
-text = "HP"
+[node name="P1" type="HBoxContainer" parent="MarginContainer/PlayersHBox"]
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
 
-[node name="HealthBar" type="ProgressBar" parent="MarginContainer/HBoxContainer"]
+[node name="NameLabel" type="Label" parent="MarginContainer/PlayersHBox/P1"]
+text = "P1"
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/PlayersHBox/P1"]
 custom_minimum_size = Vector2(0, 18)
 size_flags_horizontal = 3
 show_percentage = false
 value = 100.0
 
-[node name="ValueLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="ValueLabel" type="Label" parent="MarginContainer/PlayersHBox/P1"]
+text = "100/100"
+
+[node name="P2" type="HBoxContainer" parent="MarginContainer/PlayersHBox"]
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="MarginContainer/PlayersHBox/P2"]
+text = "P2"
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/PlayersHBox/P2"]
+custom_minimum_size = Vector2(0, 18)
+size_flags_horizontal = 3
+show_percentage = false
+value = 100.0
+
+[node name="ValueLabel" type="Label" parent="MarginContainer/PlayersHBox/P2"]
 text = "100/100"
 

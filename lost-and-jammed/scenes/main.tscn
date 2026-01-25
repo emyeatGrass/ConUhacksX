@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://b2418ug06duow"]
+[gd_scene load_steps=19 format=4 uid="uid://b2418ug06duow"]
 
 [ext_resource type="Texture2D" uid="uid://cefc2w3cgs2eq" path="res://assets/tilesets/CP_V1.0.4.png" id="1_sugp2"]
 [ext_resource type="Texture2D" uid="uid://cisnpfd6jeyta" path="res://assets/tilesets/plains.png" id="2_jyhfs"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://c1tgt3y8fed35" path="res://scripts/camera_rig.gd" id="11_camera_rig"]
 [ext_resource type="Script" uid="uid://b3cls8855t4vm" path="res://scripts/map_regenerator.gd" id="12_map_regen"]
 [ext_resource type="Script" uid="uid://d4d57rqhojmmc" path="res://scripts/game_flow.gd" id="13_game_flow"]
+[ext_resource type="Script" uid="uid://bg58m71xymo0k" path="res://scripts/world.gd" id="14_world"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tefeu"]
 texture = ExtResource("1_sugp2")
@@ -892,6 +893,7 @@ sources/1 = SubResource("TileSetAtlasSource_o6xl0")
 sources/2 = SubResource("TileSetAtlasSource_tipki")
 
 [node name="World" type="Node2D"]
+script = ExtResource("14_world")
 
 [node name="CameraRig" type="Node2D" parent="."]
 position = Vector2(392, 219)
