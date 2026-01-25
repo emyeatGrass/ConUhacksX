@@ -69,3 +69,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		knock_dir = hit_dir if hit_dir != Vector2.ZERO else car_dir
 
 	body.call("apply_knockback", knock_dir)
+
+	if body.is_in_group("Player") and body.has_method("take_damage"):
+		body.call("take_damage", 20)

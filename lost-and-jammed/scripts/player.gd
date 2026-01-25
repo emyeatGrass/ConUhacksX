@@ -4,6 +4,11 @@ extends CharacterBody2D
 @onready var coin_pool: Node = get_node_or_null("/root/World/CoinPool")
 @onready var audio_manager: Node = get_node_or_null("/root/World/AudioManager")
 
+signal hp_changed(hp: int, max_hp: int)
+
+@export var max_hp: int = 100
+var hp: int = 100
+
 const SPEED = 100.0
 var last_direction;
 var _is_attacking := false
@@ -42,6 +47,10 @@ const direction_to_run = {
 }
 
 func _ready() -> void:
+	# Initialize HP.
+	hp = clampi(max_hp, 0, max_hp)
+	hp_changed.emit(hp, max_hp)
+
 	# Ensure we always have a facing direction.
 	if last_direction == null:
 		last_direction = "right"
@@ -75,6 +84,15 @@ func _process(_delta: float) -> void:
 	if (last_direction != null):
 		var animation = direction_to_idle[last_direction] if velocity == Vector2.ZERO else direction_to_run[last_direction]
 		_animated_sprite.play(animation);
+
+func take_damage(amount: int) -> void:
+	if amount <= 0:
+		return
+	var new_hp := clampi(hp - amount, 0, max_hp)
+	if new_hp == hp:
+		return
+	hp = new_hp
+	hp_changed.emit(hp, max_hp)
 
 func apply_knockback(knock_dir: Vector2) -> void:
 	var dir := knock_dir.normalized()

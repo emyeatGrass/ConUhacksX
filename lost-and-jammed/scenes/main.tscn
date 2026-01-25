@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://b2418ug06duow"]
+[gd_scene load_steps=14 format=4 uid="uid://b2418ug06duow"]
 
 [ext_resource type="Texture2D" uid="uid://cefc2w3cgs2eq" path="res://assets/tilesets/CP_V1.0.4.png" id="1_sugp2"]
 [ext_resource type="Texture2D" uid="uid://cisnpfd6jeyta" path="res://assets/tilesets/plains.png" id="2_jyhfs"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://mbfkkcxfd8fm" path="res://scripts/spawn_manager.gd" id="6_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://di837qgcnqbmv" path="res://scenes/coin_pool.tscn" id="8_coinpool"]
 [ext_resource type="PackedScene" uid="uid://cxfk87d4evfk3" path="res://scenes/audio_manager.tscn" id="9_audio"]
+[ext_resource type="PackedScene" uid="uid://c7n3h2k9p1x4v" path="res://scenes/hud.tscn" id="10_hud"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tefeu"]
 texture = ExtResource("1_sugp2")
@@ -911,6 +912,8 @@ position = Vector2(784, 78)
 [node name="CoinPool" parent="." instance=ExtResource("8_coinpool")]
 
 [node name="AudioManager" parent="." instance=ExtResource("9_audio")]
+
+[node name="HUD" parent="." instance=ExtResource("10_hud")]
 
 [node name="SpawnManager" type="Node2D" parent="."]
 script = ExtResource("6_o6xl0")

@@ -49,6 +49,31 @@ func _physics_process(delta: float) -> void:
 		velocity = direction * chase_speed
 
 	move_and_slide()
+	_check_player_touch()
+
+
+func _check_player_touch() -> void:
+	var count := get_slide_collision_count()
+	if count <= 0:
+		return
+
+	for i in range(count):
+		var c := get_slide_collision(i)
+		if c == null:
+			continue
+		var collider := c.get_collider()
+		if collider == null:
+			continue
+
+		var collider_node := collider as Node
+		if collider_node == null:
+			continue
+
+		if collider_node.is_in_group("Player"):
+			if collider_node.has_method("take_damage"):
+				collider_node.call("take_damage", 10)
+			queue_free()
+			return
 
 
 func hit_by_coin() -> void:
