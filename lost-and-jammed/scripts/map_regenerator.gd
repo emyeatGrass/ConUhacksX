@@ -1,5 +1,7 @@
 extends Node
 
+const GameServices = preload("res://scripts/shared/game_services.gd")
+
 signal run_finished
 
 @export var ground_layer_path: NodePath = ^"../Layer0"
@@ -33,7 +35,7 @@ func _ready() -> void:
 	if player_path != NodePath():
 		_player = get_node_or_null(player_path) as Node2D
 	if _player == null:
-		_player = get_tree().get_first_node_in_group("Player") as Node2D
+		_player = GameServices.get_player(get_tree())
 
 	if _ground == null or _objects == null or _player == null:
 		push_warning("MapRegenerator: Missing nodes (ground=%s objects=%s player=%s)" % [_ground, _objects, _player])
@@ -152,7 +154,7 @@ func _end_run() -> void:
 
 
 func _show_end_overlay() -> void:
-	var hud := get_node_or_null("/root/World/HUD")
+	var hud := GameServices.get_hud(get_tree())
 	if hud == null:
 		print("END: reached final chunk.")
 		return

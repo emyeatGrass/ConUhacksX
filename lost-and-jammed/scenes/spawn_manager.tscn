@@ -1,5 +1,0 @@
-[gd_scene format=3 uid="uid://ijypem7th74c"]
-
-[node name="SpawnManager" type="Node2D"]
-
-[node name="Marker2D" type="Marker2D" parent="."]

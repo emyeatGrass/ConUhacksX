@@ -1,7 +1,9 @@
 extends Node2D
 
+const GameServices = preload("res://scripts/shared/game_services.gd")
+
 @onready var _animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var audio_manager: Node = get_node_or_null("/root/World/AudioManager")
+@onready var audio_manager: Node = GameServices.get_audio_manager(get_tree())
 
 func _ready() -> void:
 	if _animated_sprite == null:

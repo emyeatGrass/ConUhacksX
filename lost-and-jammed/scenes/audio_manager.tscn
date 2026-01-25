@@ -8,7 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://cksh4ya0spta" path="res://sfx/sword3.wav" id="6_02gw7"]
 [ext_resource type="AudioStream" uid="uid://dymsblsrx6f4d" path="res://sfx/explosion1.wav" id="7_kq7b2"]
 
-[node name="AudioManager" type="Node"]
+[node name="AudioManager" type="Node" groups=["AudioManager"]]
 script = ExtResource("1_liach")
 coin_fling_sounds = Array[AudioStream]([ExtResource("2_3asnw")])
 enemy_hit_sounds = Array[AudioStream]([ExtResource("3_3asnw")])

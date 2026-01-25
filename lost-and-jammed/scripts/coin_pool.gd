@@ -5,7 +5,6 @@ var coins: Array[Area2D] = []
 var coin_scene = preload("res://scenes/coin.tscn")
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	for i in POOL_SIZE:
 		var coin = coin_scene.instantiate()
@@ -14,6 +13,8 @@ func _ready() -> void:
 		coins.push_back(coin)
 		
 func get_coin() -> Area2D:
+	# Pooling strategy: visible == in use. Hidden == "available".
+	# Is it elegant? No. Is it fast and does it keep me from thinking? Yes.
 	for coin in coins:
 		if not coin.visible:
 			coin.show()

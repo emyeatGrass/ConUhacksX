@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+const GameServices = preload("res://scripts/shared/game_services.gd")
+
 @onready var _bar: ProgressBar = $MarginContainer/HBoxContainer/HealthBar
 @onready var _value_label: Label = $MarginContainer/HBoxContainer/ValueLabel
 
@@ -7,7 +9,7 @@ var _player: Node
 
 
 func _ready() -> void:
-	_player = get_tree().get_first_node_in_group("Player")
+	_player = GameServices.get_player(get_tree())
 	if _player == null:
 		push_warning("HUD: Player not found (expected node in group 'Player').")
 		return

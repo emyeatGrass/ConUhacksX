@@ -1,14 +1,16 @@
 extends CharacterBody2D
 
+const GameServices = preload("res://scripts/shared/game_services.gd")
+
 @export var chase_speed := 50.0
 @export var flee_speed := 80.0
 @export var knockback_distance_px: float = 96.0
 @export var knockback_duration_s: float = 0.15
 @export var spawn_pause_s: float = 0.0: set = _set_spawn_pause_s
 
-@onready var player: Node2D = get_tree().get_first_node_in_group("Player") as Node2D
+@onready var player: Node2D = GameServices.get_player(get_tree())
 @onready var _screen_notifier: VisibleOnScreenNotifier2D = $VisibleOnScreenNotifier2D
-@onready var audio_manager: Node = get_node_or_null("/root/World/AudioManager")
+@onready var audio_manager: Node = GameServices.get_audio_manager(get_tree())
 
 var _fleeing := false
 var _spawn_pause_left_s: float = 0.0
@@ -28,14 +30,16 @@ func _set_spawn_pause_s(value: float) -> void:
 	_spawn_pause_left_s = maxf(spawn_pause_s, _spawn_pause_left_s)
 
 func apply_knockback(knock_dir: Vector2) -> void:
-	var dir := knock_dir.normalized()
-	if dir == Vector2.ZERO:
-		dir = - velocity.normalized()
-	if dir == Vector2.ZERO:
-		dir = (global_position - player.global_position).normalized() if player != null else Vector2.LEFT
-
 	_knockback_time_left_s = knockback_duration_s
-	_knockback_velocity = dir * (knockback_distance_px / max(knockback_duration_s, 0.001))
+	var fallback_dir := (global_position - player.global_position) if player != null else Vector2.LEFT
+	_knockback_velocity = GameServices.compute_knockback_velocity(
+		knock_dir,
+		velocity,
+		fallback_dir,
+		knockback_distance_px,
+		knockback_duration_s,
+		Vector2.LEFT
+	)
 
 
 func _physics_process(delta: float) -> void:

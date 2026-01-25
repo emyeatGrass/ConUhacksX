@@ -1,8 +1,10 @@
 extends CharacterBody2D
 
+const GameServices = preload("res://scripts/shared/game_services.gd")
+
 @onready var _animated_sprite = $AnimatedSprite2D
-@onready var coin_pool: Node = get_node_or_null("/root/World/CoinPool")
-@onready var audio_manager: Node = get_node_or_null("/root/World/AudioManager")
+@onready var coin_pool: Node = GameServices.get_coin_pool(get_tree())
+@onready var audio_manager: Node = GameServices.get_audio_manager(get_tree())
 
 signal hp_changed(hp: int, max_hp: int)
 
@@ -23,7 +25,7 @@ var _attack_dir: Vector2 = Vector2.RIGHT
 var _attack_already_hit_by_id: Dictionary = {}
 
 var _crackhead_scene: PackedScene = preload("res://scenes/crackhead.tscn")
-var _explosion_scene: PackedScene = preload("res://scenes/Explosion.tscn")
+var _explosion_scene: PackedScene = preload("res://scenes/explosion.tscn")
 @export var knockback_distance_px: float = 64.0
 @export var knockback_duration_s: float = 0.15
 var _knockback_time_left_s: float = 0.0
@@ -96,7 +98,9 @@ func take_damage(amount: int) -> void:
 	hp_changed.emit(hp, max_hp)
 
 func heal_hp(amount: int) -> void:
-	if amount >= max_hp:
+	if amount <= 0:
+		return
+	if hp >= max_hp:
 		return
 	var new_hp := clampi(hp + amount, 0, max_hp)
 	if new_hp == hp:
@@ -105,14 +109,16 @@ func heal_hp(amount: int) -> void:
 	hp_changed.emit(hp, max_hp)
 
 func apply_knockback(knock_dir: Vector2) -> void:
-	var dir := knock_dir.normalized()
-	if dir == Vector2.ZERO:
-		dir = - velocity.normalized()
-	if dir == Vector2.ZERO:
-		dir = - direction_to_vector.get(last_direction, Vector2.RIGHT)
-
+	var fallback_dir: Vector2 = -direction_to_vector.get(last_direction, Vector2.RIGHT)
 	_knockback_time_left_s = knockback_duration_s
-	_knockback_velocity = dir * (knockback_distance_px / max(knockback_duration_s, 0.001))
+	_knockback_velocity = GameServices.compute_knockback_velocity(
+		knock_dir,
+		velocity,
+		fallback_dir,
+		knockback_distance_px,
+		knockback_duration_s,
+		Vector2.RIGHT
+	)
 
 
 func _physics_process(delta: float) -> void:

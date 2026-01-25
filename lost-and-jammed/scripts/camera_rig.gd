@@ -1,5 +1,7 @@
 extends Node2D
 
+const GameServices = preload("res://scripts/shared/game_services.gd")
+
 @export var player_path: NodePath
 @export var follow_y: bool = true
 
@@ -14,7 +16,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if _player == null:
 		# Lazy lookup (scene may instantiate player later).
-		_player = get_tree().get_first_node_in_group("Player") as Node2D
+		_player = GameServices.get_player(get_tree())
 		if _player == null:
 			return
 

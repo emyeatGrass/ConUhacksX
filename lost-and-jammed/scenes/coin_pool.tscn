@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://bf3xlkh6y7aiu" path="res://scripts/coin_pool.gd" id="1_2anrl"]
 
-[node name="CoinPool" type="Node2D"]
+[node name="CoinPool" type="Node2D" groups=["CoinPool"]]
 script = ExtResource("1_2anrl")
