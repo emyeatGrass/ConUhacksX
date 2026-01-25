@@ -53,10 +53,19 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		return
 	_recent_hit_time_left_by_id[id] = hit_cooldown_s
 
-	var knock_dir := Vector2.ZERO
-	if body is CharacterBody2D:
-		knock_dir = -body.velocity
+	# Compute knockback from hit position + car travel direction.
+	# - `hit_dir`: where the body is relative to the car (car -> body)
+	# - `car_dir`: direction the car is moving
+	var hit_dir: Vector2 = (body.global_position - global_position).normalized()
+
+	var car_dir: Vector2 = velocity.normalized()
+	if car_dir == Vector2.ZERO:
+		car_dir = Vector2.RIGHT * float(direction)
+
+	# If the body is in front of the car, bias knockback forward.
+	var forwardness: float = maxf(hit_dir.dot(car_dir), 0.0)
+	var knock_dir: Vector2 = (hit_dir + car_dir * forwardness).normalized()
 	if knock_dir == Vector2.ZERO:
-		knock_dir = body.global_position - global_position
+		knock_dir = hit_dir if hit_dir != Vector2.ZERO else car_dir
 
 	body.call("apply_knockback", knock_dir)

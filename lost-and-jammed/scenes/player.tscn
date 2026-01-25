@@ -4,7 +4,8 @@
 [ext_resource type="Script" uid="uid://ds73bq3pnqmcv" path="res://scripts/player.gd" id="1_g2els"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
-height = 20.0
+radius = 3.0
+height = 10.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
 atlas = ExtResource("1_3vyb7")
@@ -298,6 +299,8 @@ safe_margin = 0.001
 script = ExtResource("1_g2els")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 7)
+rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_g2els")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

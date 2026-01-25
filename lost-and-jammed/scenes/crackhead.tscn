@@ -106,7 +106,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t41bf"]
-size = Vector2(12, 14)
+size = Vector2(11, 6)
 
 [node name="Crackhead" type="CharacterBody2D"]
 collision_layer = 8
@@ -118,6 +118,7 @@ sprite_frames = SubResource("SpriteFrames_vnvbq")
 animation = &"idle_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 4)
 shape = SubResource("RectangleShape2D_t41bf")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
