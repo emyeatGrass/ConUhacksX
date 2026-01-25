@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=3 uid="uid://dnryr48b02fs5"]
 
-[ext_resource type="Script" uid="uid://bm6hd0nayytlk" path="res://scenes/crackhead.gd" id="1_ffxdd"]
+[ext_resource type="Script" uid="uid://bm6hd0nayytlk" path="res://scripts/crackhead.gd" id="1_ffxdd"]
 [ext_resource type="Texture2D" uid="uid://bsfnc5ykm87cc" path="res://assets/characters/prototype_character.png" id="1_t41bf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ffxdd"]
@@ -117,3 +117,6 @@ animation = &"idle_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_t41bf")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-16, -16, 32, 32)

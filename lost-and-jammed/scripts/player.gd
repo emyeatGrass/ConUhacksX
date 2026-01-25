@@ -55,8 +55,9 @@ func _physics_process(_delta: float) -> void:
 func shoot() -> void:
 	var coin = coin_pool.get_coin()
 	if coin:
-		coin.reset()
-		coin.global_position = global_position
 		var aim_dir: Vector2 = direction_to_vector.get(last_direction, Vector2.RIGHT)
+		coin.reset()
+		# Spawn a bit in front so it doesn't collide with the player instantly.
+		coin.global_position = global_position + aim_dir * 12.0
 		coin.global_rotation = aim_dir.angle()
 		#audio_manager.play_gunshot()
