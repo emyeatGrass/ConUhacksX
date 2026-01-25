@@ -5,7 +5,7 @@ extends CharacterBody2D
 @export var knockback_distance_px: float = 96.0
 @export var knockback_duration_s: float = 0.15
 
-@onready var player: Node2D = get_node_or_null("/root/World/Player")
+@onready var player: Node2D = get_tree().get_first_node_in_group("Player") as Node2D
 @onready var _screen_notifier: VisibleOnScreenNotifier2D = $VisibleOnScreenNotifier2D
 @onready var audio_manager: Node = get_node_or_null("/root/World/AudioManager")
 

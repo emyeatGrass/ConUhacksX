@@ -44,8 +44,8 @@ func _on_body_entered(body: Node2D) -> void:
 	# Notify enemies/NPCs and return this coin to the pool.
 	# (The pool treats "hidden" coins as available.)
 	# Ignore hitting the player immediately on spawn.
-	var player := get_node_or_null("/root/World/Player")
-	if body == player:
+	var player := get_tree().get_first_node_in_group("Player")
+	if player != null and body == player:
 		return
 	if body.has_method("hit_by_coin"):
 		body.call("hit_by_coin")

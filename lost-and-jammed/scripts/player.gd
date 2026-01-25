@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
 @onready var _animated_sprite = $AnimatedSprite2D
-@onready var coin_pool = $"../CoinPool"
-@onready var audio_manager: Node = get_node_or_null("../AudioManager")
+@onready var coin_pool: Node = get_node_or_null("/root/World/CoinPool")
+@onready var audio_manager: Node = get_node_or_null("/root/World/AudioManager")
 
 const SPEED = 100.0
 var last_direction;
@@ -75,6 +75,9 @@ func _physics_process(delta: float) -> void:
 
 
 func shoot() -> void:
+	if coin_pool == null:
+		push_warning("Player: CoinPool not found (expected at /root/World/CoinPool)")
+		return
 	var coin = coin_pool.get_coin()
 	if coin:
 		var aim_dir: Vector2 = direction_to_vector.get(last_direction, Vector2.RIGHT)
