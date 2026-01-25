@@ -162,6 +162,10 @@ func _end_run() -> void:
 	_show_end_overlay()
 	run_finished.emit()
 
+	# Return to main menu after 5 seconds
+	await get_tree().create_timer(5.0).timeout
+	get_tree().change_scene_to_file("res://scenes/menu.tscn")
+
 
 func _show_end_overlay() -> void:
 	var hud := GameServices.get_hud(get_tree())

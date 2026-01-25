@@ -5,6 +5,11 @@ extends Node2D
 @export var player1_path: NodePath = ^"Layer1/Player"
 @export var player2_spawn_offset: Vector2 = Vector2(32, 0)
 
+func _input(event: InputEvent) -> void:
+	# Return to main menu when escape is pressed
+	if event.is_action_pressed("ui_cancel"):
+		get_tree().change_scene_to_file("res://scenes/menu.tscn")
+
 func _enter_tree() -> void:
 	# Configure players before their `_ready()` runs (so inputs/tags are correct).
 	var p1 := get_node_or_null(player1_path)
