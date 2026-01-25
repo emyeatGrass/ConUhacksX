@@ -69,7 +69,11 @@ func get_current_chunk_index() -> int:
 	if delta <= 0:
 		return 0
 
-	var idx := int(floor(float(delta) / float(_chunk_height_cells)))
+	# IMPORTANT:
+	# If we've moved 1 row above the base chunk's top edge (delta == 1),
+	# we are already in chunk 1. So we want a ceil-style division:
+	# idx = ceil(delta / chunk_height) == (delta + h - 1) / h for ints.
+	var idx := int(floor(float(delta + _chunk_height_cells - 1) / float(_chunk_height_cells)))
 	# Clamp to generated range so offset doesn’t jump ahead of generated content.
 	return clampi(idx, 0, max(_generated_chunks - 1, 0))
 

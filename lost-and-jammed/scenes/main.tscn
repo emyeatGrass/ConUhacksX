@@ -930,7 +930,6 @@ player_path = NodePath("../Layer1/Player")
 
 [node name="SpawnManager" type="Node2D" parent="."]
 script = ExtResource("6_o6xl0")
-map_regenerator_path = NodePath("../MapRegenerator")
 
 [node name="Timer" type="Timer" parent="SpawnManager"]
 wait_time = 0.5
