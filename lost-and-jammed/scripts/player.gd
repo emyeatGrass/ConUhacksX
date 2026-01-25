@@ -23,6 +23,7 @@ var _attack_dir: Vector2 = Vector2.RIGHT
 var _attack_already_hit_by_id: Dictionary = {}
 
 var _crackhead_scene: PackedScene = preload("res://scenes/crackhead.tscn")
+var _explosion_scene: PackedScene = preload("res://scenes/Explosion.tscn")
 @export var knockback_distance_px: float = 64.0
 @export var knockback_duration_s: float = 0.15
 var _knockback_time_left_s: float = 0.0
@@ -228,6 +229,13 @@ func _do_sword_hit(attack_dir: Vector2) -> void:
 
 		var hit_pos: Vector2 = best.get("position", global_position + dir * sword_range_px)
 		var parent = collider.get_parent()
+
+		# Spawn an explosion VFX at the hit position.
+		if parent != null and _explosion_scene != null:
+			var explosion := _explosion_scene.instantiate()
+			(parent as Node).add_child(explosion)
+			(explosion as Node2D).global_position = hit_pos
+
 		(collider as Node).queue_free()
 
 		if parent != null and _crackhead_scene != null:
