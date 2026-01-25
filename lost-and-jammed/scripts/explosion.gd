@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var _animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-
+@onready var audio_manager: Node = get_node_or_null("/root/World/AudioManager")
 
 func _ready() -> void:
 	if _animated_sprite == null:
@@ -25,8 +25,10 @@ func _ready() -> void:
 
 	# Plays the currently selected/default animation (set in the editor).
 	_animated_sprite.play()
+	
+	if audio_manager and audio_manager.has_method("play_explosion"):
+		audio_manager.call("play_explosion")
 
 
 func _on_animation_finished() -> void:
 	queue_free()
-

@@ -30,7 +30,7 @@ func _set_spawn_pause_s(value: float) -> void:
 func apply_knockback(knock_dir: Vector2) -> void:
 	var dir := knock_dir.normalized()
 	if dir == Vector2.ZERO:
-		dir = -velocity.normalized()
+		dir = - velocity.normalized()
 	if dir == Vector2.ZERO:
 		dir = (global_position - player.global_position).normalized() if player != null else Vector2.LEFT
 
@@ -102,9 +102,12 @@ func _check_player_touch() -> void:
 
 func hit_by_coin() -> void:
 	# Getting hit by a coin ends the grace period (if any) and makes the crackhead friendly.
+	if _friendly:
+		return
 	_spawn_pause_left_s = 0.0
 	_friendly = true
 	_fleeing = true
+	player.call("heal_hp", 10)
 	if audio_manager and audio_manager.has_method("play_enemy_hit"):
 		audio_manager.call("play_enemy_hit")
 

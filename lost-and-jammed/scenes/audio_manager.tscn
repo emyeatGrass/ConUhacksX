@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cxfk87d4evfk3"]
+[gd_scene load_steps=8 format=3 uid="uid://cxfk87d4evfk3"]
 
 [ext_resource type="Script" uid="uid://bj1wcpkyef50q" path="res://scripts/audio_manager.gd" id="1_liach"]
 [ext_resource type="AudioStream" uid="uid://c8yvuvb4w0ctt" path="res://sfx/coinfling.wav" id="2_3asnw"]
@@ -6,9 +6,11 @@
 [ext_resource type="AudioStream" uid="uid://ddqt413koju87" path="res://sfx/sword1.wav" id="4_njtn3"]
 [ext_resource type="AudioStream" uid="uid://chjf7m8ix5hwt" path="res://sfx/sword2.wav" id="5_kq7b2"]
 [ext_resource type="AudioStream" uid="uid://cksh4ya0spta" path="res://sfx/sword3.wav" id="6_02gw7"]
+[ext_resource type="AudioStream" uid="uid://dymsblsrx6f4d" path="res://sfx/explosion1.wav" id="7_kq7b2"]
 
 [node name="AudioManager" type="Node"]
 script = ExtResource("1_liach")
 coin_fling_sounds = Array[AudioStream]([ExtResource("2_3asnw")])
 enemy_hit_sounds = Array[AudioStream]([ExtResource("3_3asnw")])
 sword_attack_sounds = Array[AudioStream]([ExtResource("4_njtn3"), ExtResource("5_kq7b2"), ExtResource("6_02gw7")])
+explosion_sounds = Array[AudioStream]([ExtResource("7_kq7b2")])

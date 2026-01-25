@@ -227,14 +227,33 @@ func _do_sword_hit(attack_dir: Vector2) -> void:
 			return
 		_attack_already_hit_by_id[id] = true
 
-		var hit_pos: Vector2 = best.get("position", global_position + dir * sword_range_px)
+		# Prefer the ray hit point. If it isn't present for any reason, fall back to the
+		# collider's position (car center) rather than a player-derived value.
+		var hit_pos_v: Variant = best.get("position")
+		if not (hit_pos_v is Vector2):
+			hit_pos_v = best.get(&"position")
+		var hit_pos: Vector2
+		if hit_pos_v is Vector2:
+			hit_pos = hit_pos_v
+		elif collider is Node2D:
+			hit_pos = (collider as Node2D).global_position
+		else:
+			hit_pos = global_position + dir * sword_range_px
+
 		var parent = collider.get_parent()
 
 		# Spawn an explosion VFX at the hit position.
 		if parent != null and _explosion_scene != null:
+			var explosion_pos: Vector2 = hit_pos
+			# Cars have their visible sprite offset from the root, so prefer the visual position.
+			if collider is Node:
+				var car_sprite := (collider as Node).get_node_or_null(^"Sprite2D")
+				if car_sprite is Node2D:
+					explosion_pos = (car_sprite as Node2D).global_position
+
 			var explosion := _explosion_scene.instantiate()
 			(parent as Node).add_child(explosion)
-			(explosion as Node2D).global_position = hit_pos
+			(explosion as Node2D).global_position = explosion_pos
 
 		(collider as Node).queue_free()
 

@@ -14,7 +14,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 func _spawn_offset_y() -> float:
@@ -41,7 +41,7 @@ func spawn_car():
 	if random_marker.is_in_group("RightBound"):
 		car.direction = -1 # Move Left
 	else:
-		car.direction = 1  # Move Right
+		car.direction = 1 # Move Right
 		
 	add_child(car)
 
@@ -63,7 +63,7 @@ func _on_timer_timeout() -> void:
 		car.direction = -1 # Move left
 		car.should_flip = false
 	else:
-		car.direction = 1  # Move right
+		car.direction = 1 # Move right
 		car.should_flip = true
 	
 	add_child(car)
