@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var base_speed = 200.0
+@export var base_speed = 400.0
 var current_speed = 0.0
 var direction = -1 # (left)
 var should_flip = false
@@ -19,7 +19,7 @@ func _process(delta: float):
 	if ray.is_colliding():
 		var collider = ray.get_collider()
 		# If we hit another car, match its speed
-		if collider is CharacterBody2D:
+		if collider is CharacterBody2D and collider != self:
 			current_speed = lerp(current_speed, collider.velocity.length(), 0.1)
 	else:
 		# No car in front? Accelerate back to base speed
@@ -30,3 +30,9 @@ func _process(delta: float):
 
 func _on_visible_on_screen_notifier_2d_screen_exited():
 	queue_free() # Replace with function body.
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body.is_in_group("Player"):
+		print("Player was hit!")
+		# body.die() or get_tree().reload_current_scene()

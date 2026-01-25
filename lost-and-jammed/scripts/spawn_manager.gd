@@ -11,8 +11,14 @@ func _process(delta: float) -> void:
 	pass
 
 func spawn_car():
-	var spawn_points = get_tree().get_nodes_in_group("RightBound")
-	var random_marker = spawn_points.pick_random()
+	var spawn_group = "RightBound" if randf() > 0.5 else "LeftBound"
+	var markers = get_tree().get_nodes_in_group(spawn_group)
+	if markers.is_empty(): return
+	
+	var random_marker = markers.pick_random()
+	
+	# Check if marker has a car
+	
 	
 	var car = car_scene.instantiate()
 	car.global_position = random_marker.global_position
@@ -23,7 +29,6 @@ func spawn_car():
 		car.direction = 1  # Move Right
 		
 	add_child(car)
-
 
 func _on_timer_timeout() -> void:
 	# 1. Decide direction (50/50 chance)
