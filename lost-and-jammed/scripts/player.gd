@@ -6,6 +6,18 @@ extends CharacterBody2D
 
 const SPEED = 100.0
 var last_direction;
+var _is_attacking := false
+@export var sword_range_px := 64.0
+@export var sword_half_width_px := 10.0
+@export var sword_origin_forward_px := 12.0
+@export var sword_active_start_s := 0.05
+@export var sword_active_end_s := 0.45
+
+var _attack_time_s := 0.0
+var _attack_dir: Vector2 = Vector2.RIGHT
+var _attack_already_hit_by_id: Dictionary = {}
+
+var _crackhead_scene: PackedScene = preload("res://scenes/crackhead.tscn")
 @export var knockback_distance_px: float = 96.0
 @export var knockback_duration_s: float = 0.15
 var _knockback_time_left_s: float = 0.0
@@ -29,6 +41,15 @@ const direction_to_run = {
 	"down": "run_down"
 }
 
+func _ready() -> void:
+	# Ensure we always have a facing direction.
+	if last_direction == null:
+		last_direction = "right"
+
+	# Used to end non-looping attack animations cleanly.
+	if _animated_sprite and not _animated_sprite.animation_finished.is_connected(_on_animated_sprite_animation_finished):
+		_animated_sprite.animation_finished.connect(_on_animated_sprite_animation_finished)
+
 func _process(_delta: float) -> void:
 	if Input.is_action_pressed("move_right"):
 		last_direction = "right";
@@ -41,8 +62,15 @@ func _process(_delta: float) -> void:
 	elif Input.is_action_pressed("move_down"):
 		last_direction = "down";
 		
-	if Input.is_action_just_pressed("shoot"):
+	if Input.is_action_just_pressed("attack"):
+		_start_attack()
+
+	if Input.is_action_just_pressed("shoot") and not _is_attacking:
 		shoot()
+
+	# While attacking, keep the attack animation (don't overwrite with idle/run).
+	if _is_attacking:
+		return
 
 	if (last_direction != null):
 		var animation = direction_to_idle[last_direction] if velocity == Vector2.ZERO else direction_to_run[last_direction]
@@ -63,6 +91,15 @@ func _physics_process(delta: float) -> void:
 	if _knockback_time_left_s > 0.0:
 		_knockback_time_left_s = max(_knockback_time_left_s - delta, 0.0)
 		velocity = _knockback_velocity
+		move_and_slide()
+		return
+
+	if _is_attacking:
+		_attack_time_s += delta
+		if _attack_time_s >= sword_active_start_s and _attack_time_s <= sword_active_end_s:
+			_do_sword_hit(_attack_dir)
+		# Lock movement during attack (simple + readable).
+		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 
@@ -87,3 +124,92 @@ func shoot() -> void:
 		coin.global_rotation = aim_dir.angle()
 		if audio_manager and audio_manager.has_method("play_coin_fling"):
 			audio_manager.call("play_coin_fling")
+
+
+func _start_attack() -> void:
+	if _is_attacking:
+		return
+	_is_attacking = true
+	_attack_time_s = 0.0
+	_attack_already_hit_by_id.clear()
+
+	var dir_key: String = last_direction if last_direction != null else "right"
+	var attack_dir: Vector2 = direction_to_vector.get(dir_key, Vector2.RIGHT)
+	_attack_dir = attack_dir
+
+	# Play attack animation based on facing.
+	match dir_key:
+		"up":
+			_animated_sprite.play("attack_up")
+		"down":
+			_animated_sprite.play("attack_down")
+		_:
+			_animated_sprite.play("attack_side")
+
+
+func _do_sword_hit(attack_dir: Vector2) -> void:
+	var dir := attack_dir.normalized()
+	if dir == Vector2.ZERO:
+		dir = Vector2.RIGHT
+
+	var ortho := Vector2(-dir.y, dir.x)
+
+	var space := get_world_2d().direct_space_state
+	var base_origin: Vector2 = global_position + dir * sword_origin_forward_px
+	var origins := [
+		base_origin,
+		base_origin + ortho * sword_half_width_px,
+		base_origin - ortho * sword_half_width_px,
+	]
+
+	var best: Dictionary = {}
+	var best_dist_sq := INF
+
+	for o in origins:
+		var params := PhysicsRayQueryParameters2D.create(o, o + dir * sword_range_px)
+		params.exclude = [self]
+		# Query all layers, then filter by car layer on the hit collider.
+		# This avoids issues if cars change layers later.
+		params.collision_mask = -1
+		params.collide_with_areas = true
+		params.collide_with_bodies = true
+
+		var hit := space.intersect_ray(params)
+		if hit.is_empty():
+			continue
+
+		var d2 = o.distance_squared_to(hit.position)
+		if d2 < best_dist_sq:
+			best_dist_sq = d2
+			best = hit
+
+	if best.is_empty():
+		return
+
+	var collider = best.get("collider")
+	if collider == null:
+		return
+
+	# Treat anything on the car layer bit as a "car" target.
+	if collider is CollisionObject2D and (int((collider as CollisionObject2D).collision_layer) & 4) != 0:
+		var id := (collider as Node).get_instance_id()
+		if _attack_already_hit_by_id.has(id):
+			return
+		_attack_already_hit_by_id[id] = true
+
+		var hit_pos: Vector2 = best.get("position", global_position + dir * sword_range_px)
+		var parent = collider.get_parent()
+		(collider as Node).queue_free()
+
+		if parent != null and _crackhead_scene != null:
+			var crackhead := _crackhead_scene.instantiate()
+			(parent as Node).add_child(crackhead)
+			(crackhead as Node2D).global_position = hit_pos
+
+
+func _on_animated_sprite_animation_finished() -> void:
+	var anim = _animated_sprite.animation
+	if anim == "attack_down" or anim == "attack_side" or anim == "attack_up":
+		_is_attacking = false
+		_attack_time_s = 0.0
+		_attack_already_hit_by_id.clear()

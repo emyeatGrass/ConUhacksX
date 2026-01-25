@@ -54,6 +54,9 @@ animations = [{
 radius = 9.0
 
 [node name="Coin" type="Area2D"]
+collision_layer = 1
+# Detect crackheads (their `collision_layer` is 8 in `crackhead.tscn`).
+collision_mask = 8
 script = ExtResource("1_s0mny")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
