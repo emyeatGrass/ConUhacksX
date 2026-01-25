@@ -17,11 +17,10 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=1820
-window/size/viewport_height=720
+window/size/viewport_width=784
+window/size/viewport_height=528
 window/size/mode=2
 window/stretch/mode="viewport"
-window/stretch/scale_mode="integer"
 window/vsync/vsync_mode=0
 
 [dotnet]
