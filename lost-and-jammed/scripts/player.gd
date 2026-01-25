@@ -1,6 +1,12 @@
 extends CharacterBody2D
 
 @onready var _animated_sprite = $AnimatedSprite2D
+@export var max_health := 3
+var health := 3
+
+@onready var hud := get_node("/root/Main/HUD")  # change "Main" if your root name differs
+@onready var hp_bar: ProgressBar = $ProgressBar   # ✅ Proper reference
+
 
 const SPEED = 100.0
 var last_direction;
@@ -32,6 +38,7 @@ func _process(delta: float) -> void:
 	if (last_direction != null):
 		var animation = direction_to_idle[last_direction] if velocity == Vector2.ZERO else direction_to_run[last_direction]
 		_animated_sprite.play(animation);
+	hp_bar.value = health
 
 func _physics_process(delta: float) -> void:
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")

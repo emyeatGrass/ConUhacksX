@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://78lki3q3gxsq"]
+
+[ext_resource type="Script" uid="uid://8d8cka1rmys" path="res://scenes/hud.gd" id="1_ahhtf"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_oo0fn"]
+load_path = "res://.godot/imported/Item 3-1.png.png-5efd1907d6b9878bf664ccd7eaf3f068.ctex"
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_ahhtf")
+
+[node name="Hearts" type="HBoxContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="Heart1" type="TextureRect" parent="Hearts"]
+layout_mode = 2
+texture = SubResource("CompressedTexture2D_oo0fn")
+stretch_mode = 5
+
+[node name="Heart2" type="TextureRect" parent="Hearts"]
+layout_mode = 2
+texture = SubResource("CompressedTexture2D_oo0fn")
+stretch_mode = 5
+
+[node name="Heart3" type="TextureRect" parent="Hearts"]
+layout_mode = 2
+texture = SubResource("CompressedTexture2D_oo0fn")
+stretch_mode = 5

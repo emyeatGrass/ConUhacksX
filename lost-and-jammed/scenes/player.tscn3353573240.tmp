@@ -326,4 +326,5 @@ theme_override_styles/background = SubResource("StyleBoxFlat_g2els")
 theme_override_styles/fill = SubResource("StyleBoxFlat_qhqgy")
 max_value = 3.0
 step = 1.0
+value = 3.0
 show_percentage = false
