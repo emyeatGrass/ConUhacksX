@@ -4,8 +4,8 @@ extends CharacterBody2D
 @export var max_health := 3
 var health := 3
 
-@onready var hud := get_node("/root/Main/HUD")  # change "Main" if your root name differs
-@onready var hp_bar: ProgressBar = $ProgressBar   # ✅ Proper reference
+@onready var hud := get_node("/root/Main/HUD") 
+@onready var hp_bar: ProgressBar = $ProgressBar
 
 
 const SPEED = 100.0
@@ -22,6 +22,16 @@ const direction_to_run = {
 	"up": "run_up",
 	"down": "run_down"
 }
+
+func _ready() -> void:
+	hp_bar.max_value = max_health
+	hp_bar.value = health
+
+func take_damage(amount := 1) -> void:
+	health = clamp(health - amount, 0, max_health)
+	hp_bar.value = health
+	if health <= 0:
+		print("Game Over") # replace later with your game_over()
 
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("move_right"):
