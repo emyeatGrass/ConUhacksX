@@ -167,6 +167,7 @@ func _flash_damage() -> void:
 func _die() -> void:
 	if _is_dead:
 		return
+	audio_manager.call("play_game_over")
 	_is_dead = true
 
 	# Stop player control immediately.

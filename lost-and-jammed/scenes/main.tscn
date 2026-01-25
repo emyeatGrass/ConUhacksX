@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://b2418ug06duow"]
+[gd_scene load_steps=19 format=4 uid="uid://b2418ug06duow"]
 
 [ext_resource type="Texture2D" uid="uid://cefc2w3cgs2eq" path="res://assets/tilesets/CP_V1.0.4.png" id="1_sugp2"]
 [ext_resource type="Texture2D" uid="uid://cisnpfd6jeyta" path="res://assets/tilesets/plains.png" id="2_jyhfs"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://di837qgcnqbmv" path="res://scenes/coin_pool.tscn" id="8_coinpool"]
 [ext_resource type="PackedScene" uid="uid://cxfk87d4evfk3" path="res://scenes/audio_manager.tscn" id="9_audio"]
 [ext_resource type="AudioStream" uid="uid://xj2qhthuam0w" path="res://sfx/oof.wav" id="9_eb6dy"]
+[ext_resource type="AudioStream" uid="uid://bweepclyycemk" path="res://sfx/game_over.wav" id="10_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://c7n3h2lap1x4v" path="res://scenes/hud.tscn" id="10_hud"]
 [ext_resource type="Script" uid="uid://c1tgt3y8fed35" path="res://scripts/camera_rig.gd" id="11_camera_rig"]
 [ext_resource type="Script" uid="uid://b3cls8855t4vm" path="res://scripts/map_regenerator.gd" id="12_map_regen"]
@@ -924,6 +925,7 @@ position = Vector2(784, 78)
 
 [node name="AudioManager" parent="." instance=ExtResource("9_audio")]
 player_hurt_sounds = Array[AudioStream]([ExtResource("9_eb6dy")])
+game_over_sound = Array[AudioStream]([ExtResource("10_a8y0u")])
 
 [node name="HUD" parent="." instance=ExtResource("10_hud")]
 
