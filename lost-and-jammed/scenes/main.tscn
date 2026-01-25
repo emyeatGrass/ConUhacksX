@@ -920,7 +920,7 @@ position = Vector2(97, 111)
 script = ExtResource("6_o6xl0")
 
 [node name="Timer" type="Timer" parent="SpawnManager"]
-wait_time = 0.2
+wait_time = 0.5
 autostart = true
 
 [node name="LeftLane1" type="Marker2D" parent="SpawnManager" groups=["RightBound"]]

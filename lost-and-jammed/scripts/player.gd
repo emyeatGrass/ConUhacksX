@@ -6,6 +6,10 @@ extends CharacterBody2D
 
 const SPEED = 100.0
 var last_direction;
+@export var knockback_distance_px: float = 96.0
+@export var knockback_duration_s: float = 0.15
+var _knockback_time_left_s: float = 0.0
+var _knockback_velocity: Vector2 = Vector2.ZERO
 const direction_to_vector := {
 	"right": Vector2.RIGHT,
 	"left": Vector2.LEFT,
@@ -44,28 +48,30 @@ func _process(_delta: float) -> void:
 		var animation = direction_to_idle[last_direction] if velocity == Vector2.ZERO else direction_to_run[last_direction]
 		_animated_sprite.play(animation);
 
-func _physics_process(_delta: float) -> void:
+func apply_knockback(knock_dir: Vector2) -> void:
+	var dir := knock_dir.normalized()
+	if dir == Vector2.ZERO:
+		dir = -velocity.normalized()
+	if dir == Vector2.ZERO:
+		dir = -direction_to_vector.get(last_direction, Vector2.RIGHT)
+
+	_knockback_time_left_s = knockback_duration_s
+	_knockback_velocity = dir * (knockback_distance_px / max(knockback_duration_s, 0.001))
+
+
+func _physics_process(delta: float) -> void:
+	if _knockback_time_left_s > 0.0:
+		_knockback_time_left_s = max(_knockback_time_left_s - delta, 0.0)
+		velocity = _knockback_velocity
+		move_and_slide()
+		return
+
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if direction:
 		velocity = direction * SPEED
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, SPEED)
 	move_and_slide()
-	
-	for i in range(get_slide_collision_count()):
-		var collision = get_slide_collision(i)
-		var collider = collision.get_collider()
-		
-		# If we are hit by a car (check by Group or Class)
-		if collider and collider.has_method("_on_visible_on_screen_notifier_2d_screen_exited"): # Or use groups: if collider.is_in_group("Car")
-			# Create a push vector based on the car's direction
-			var push_force = collider.velocity
-			# Option 1: Direct shove (Simulates getting hit hard)
-			velocity += push_force * 2.0 * _delta
-			# Option 2: Position adjustment (Ensures you don't get stuck inside the car)
-			# This is useful if the car is very fast
-			if push_force.x != 0:
-				global_position.x += push_force.x * _delta
 
 
 func shoot() -> void:

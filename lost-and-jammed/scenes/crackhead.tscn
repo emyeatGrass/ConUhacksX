@@ -109,6 +109,8 @@ animations = [{
 size = Vector2(12, 14)
 
 [node name="Crackhead" type="CharacterBody2D"]
+collision_layer = 8
+collision_mask = 3
 script = ExtResource("1_ffxdd")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

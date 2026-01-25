@@ -4,9 +4,11 @@ extends CharacterBody2D
 var current_speed = 0.0
 var direction = -1 
 var should_flip = false;
+@export var hit_cooldown_s: float = 0.2
 
 @onready var sprite = $Sprite2D
 @onready var ray = $RayCast2D
+var _recent_hit_time_left_by_id: Dictionary = {}
 
 func _ready():
 	current_speed = base_speed
@@ -15,6 +17,12 @@ func _ready():
 	ray.set_collision_mask_value(2, false) 
 
 func _physics_process(delta: float) -> void:
+	# Decay per-body hit cooldowns.
+	for id in _recent_hit_time_left_by_id.keys():
+		_recent_hit_time_left_by_id[id] = float(_recent_hit_time_left_by_id[id]) - delta
+		if float(_recent_hit_time_left_by_id[id]) <= 0.0:
+			_recent_hit_time_left_by_id.erase(id)
+
 	if ray.is_colliding():
 		var collider = ray.get_collider()
 		# Ensure we don't brake for the player accidentally
@@ -33,6 +41,22 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 
 # Detects when the player is "squashed" or hit
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("Player"):
-		print("Player was hit!")
-		# You can add: body.take_damage() or get_tree().reload_current_scene()
+	if body == null:
+		return
+
+	# Knockback anything that supports it (player + crackheads).
+	if not body.has_method("apply_knockback"):
+		return
+
+	var id := body.get_instance_id()
+	if _recent_hit_time_left_by_id.has(id):
+		return
+	_recent_hit_time_left_by_id[id] = hit_cooldown_s
+
+	var knock_dir := Vector2.ZERO
+	if body is CharacterBody2D:
+		knock_dir = -body.velocity
+	if knock_dir == Vector2.ZERO:
+		knock_dir = body.global_position - global_position
+
+	body.call("apply_knockback", knock_dir)
