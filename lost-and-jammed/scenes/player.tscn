@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://bc7h7p2w1qrxo"]
+[gd_scene load_steps=56 format=3 uid="uid://bc7h7p2w1qrxo"]
 
 [ext_resource type="Texture2D" uid="uid://b5pyegn4qob8u" path="res://assets/characters/player.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://ds73bq3pnqmcv" path="res://scripts/player.gd" id="1_g2els"]
@@ -54,6 +54,18 @@ region = Rect2(96, 384, 48, 48)
 [sub_resource type="AtlasTexture" id="AtlasTexture_u2ulf"]
 atlas = ExtResource("1_3vyb7")
 region = Rect2(144, 384, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6e8lb"]
+atlas = ExtResource("1_3vyb7")
+region = Rect2(0, 432, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gdjj"]
+atlas = ExtResource("1_3vyb7")
+region = Rect2(48, 432, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sc3ue"]
+atlas = ExtResource("1_3vyb7")
+region = Rect2(96, 432, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
 atlas = ExtResource("1_3vyb7")
@@ -254,6 +266,20 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_6e8lb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2gdjj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sc3ue")
+}],
+"loop": true,
+"name": &"death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_g2els")
 }, {
 "duration": 1.0,
@@ -406,4 +432,4 @@ shape = SubResource("CapsuleShape2D_g2els")
 texture_filter = 1
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_60mlk")
-animation = &"attack_up"
+animation = &"death"

@@ -20,3 +20,8 @@ func get_coin() -> Area2D:
 			coin.show()
 			return coin
 	return null
+
+func despawn_all() -> void:
+	for coin in coins:
+		if coin != null and coin.has_method("despawn"):
+			coin.call("despawn")

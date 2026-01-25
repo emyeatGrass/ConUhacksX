@@ -176,6 +176,42 @@ func _show_end_overlay() -> void:
 
 	hud.add_child(label)
 
+func reset_run() -> void:
+	# Restore the authored (chunk 0) map state and clear "end" state.
+	_ended = false
+	_generated_chunks = 1
+
+	if _ground != null:
+		_clear_layer(_ground)
+	if _objects != null:
+		_clear_layer(_objects)
+
+	# Re-apply the initial snapshot (chunk 0).
+	if _ground != null and _objects != null and not _ground_tiles.is_empty() and not _object_tiles.is_empty():
+		_generate_chunk(0)
+
+	# Remove any end overlay label if present.
+	var hud := GameServices.get_hud(get_tree())
+	if hud != null:
+		var end_label := hud.get_node_or_null(^"EndLabel")
+		if end_label != null:
+			end_label.queue_free()
+
+	# If the run had ended, the player was frozen in `_end_run()`; unfreeze it.
+	if _player != null:
+		_player = GameServices.get_player(get_tree()) if _player == null else _player
+	if _player != null and _player.has_method("set_process") and _player.has_method("set_physics_process"):
+		# Only unfreeze if we were previously ended.
+		_player.set_process(true)
+		_player.set_physics_process(true)
+
+	set_process(true)
+
+func _clear_layer(layer: TileMapLayer) -> void:
+	# TileMapLayer doesn't have a guaranteed fast "clear" across versions, so do it explicitly.
+	for cell: Vector2i in layer.get_used_cells():
+		layer.set_cell(cell, -1)
+
 
 func _snapshot_layer(layer: TileMapLayer, rect: Rect2i) -> Array[Dictionary]:
 	var out: Array[Dictionary] = []

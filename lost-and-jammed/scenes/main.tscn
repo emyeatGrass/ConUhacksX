@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://c7n3h2lap1x4v" path="res://scenes/hud.tscn" id="10_hud"]
 [ext_resource type="Script" uid="uid://c1tgt3y8fed35" path="res://scripts/camera_rig.gd" id="11_camera_rig"]
 [ext_resource type="Script" uid="uid://b3cls8855t4vm" path="res://scripts/map_regenerator.gd" id="12_map_regen"]
+[ext_resource type="Script" path="res://scripts/game_flow.gd" id="13_game_flow"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tefeu"]
 texture = ExtResource("1_sugp2")
@@ -929,6 +930,9 @@ player_hurt_sounds = Array[AudioStream]([ExtResource("9_eb6dy")])
 [node name="MapRegenerator" type="Node" parent="."]
 script = ExtResource("12_map_regen")
 player_path = NodePath("../Layer1/Player")
+
+[node name="GameFlow" type="Node" parent="."]
+script = ExtResource("13_game_flow")
 
 [node name="SpawnManager" type="Node2D" parent="."]
 script = ExtResource("6_o6xl0")

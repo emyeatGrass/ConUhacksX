@@ -4,6 +4,7 @@ const GameServices = preload("res://scripts/shared/game_services.gd")
 
 @onready var _bar: ProgressBar = $MarginContainer/HBoxContainer/HealthBar
 @onready var _value_label: Label = $MarginContainer/HBoxContainer/ValueLabel
+@onready var _death_overlay: ColorRect = $DeathOverlay
 
 var _player: Node
 
@@ -28,4 +29,9 @@ func _on_hp_changed(hp: int, max_hp: int) -> void:
 	_bar.max_value = max_hp
 	_bar.value = hp
 	_value_label.text = "%d/%d" % [hp, max_hp]
+
+func show_death_overlay(enabled: bool) -> void:
+	if _death_overlay == null:
+		return
+	_death_overlay.visible = enabled
 

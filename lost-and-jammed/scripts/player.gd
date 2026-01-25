@@ -7,9 +7,15 @@ const GameServices = preload("res://scripts/shared/game_services.gd")
 @onready var audio_manager: Node = GameServices.get_audio_manager(get_tree())
 
 signal hp_changed(hp: int, max_hp: int)
+signal died
 
 @export var max_hp: int = 100
 var hp: int = 100
+
+@export var death_animation_name: StringName = &"death"
+var _is_dead: bool = false
+var _base_collision_layer: int
+var _base_collision_mask: int
 
 @export var damage_flash_color: Color = Color(1.0, 0.2, 0.2, 1.0)
 @export var damage_flash_out_s: float = 0.12
@@ -57,6 +63,8 @@ func _ready() -> void:
 	# Initialize HP.
 	hp = clampi(max_hp, 0, max_hp)
 	hp_changed.emit(hp, max_hp)
+	_base_collision_layer = int(collision_layer)
+	_base_collision_mask = int(collision_mask)
 
 	# Ensure we always have a facing direction.
 	if last_direction == null:
@@ -93,6 +101,8 @@ func _process(_delta: float) -> void:
 		_animated_sprite.play(animation);
 
 func take_damage(amount: int) -> void:
+	if _is_dead:
+		return
 	if amount <= 0:
 		return
 	var new_hp := clampi(hp - amount, 0, max_hp)
@@ -102,6 +112,9 @@ func take_damage(amount: int) -> void:
 	hp_changed.emit(hp, max_hp)
 	if audio_manager and audio_manager.has_method("play_player_hurt"):
 		audio_manager.call("play_player_hurt")
+	if hp <= 0:
+		_die()
+		return
 	_flash_damage()
 
 func heal_hp(amount: int) -> void:
@@ -115,6 +128,30 @@ func heal_hp(amount: int) -> void:
 	hp = new_hp
 	hp_changed.emit(hp, max_hp)
 
+func revive_at(spawn_global_pos: Vector2) -> void:
+	_is_dead = false
+	collision_layer = _base_collision_layer
+	collision_mask = _base_collision_mask
+	global_position = spawn_global_pos
+	velocity = Vector2.ZERO
+	_knockback_time_left_s = 0.0
+	_knockback_velocity = Vector2.ZERO
+	_is_attacking = false
+	_attack_time_s = 0.0
+	_attack_already_hit_by_id.clear()
+	if is_instance_valid(_damage_flash_tween):
+		_damage_flash_tween.kill()
+	if _animated_sprite:
+		_animated_sprite.self_modulate = Color.WHITE
+		# Return to a sane idle.
+		var dir_key: String = last_direction if last_direction != null else "right"
+		_animated_sprite.play(direction_to_idle.get(dir_key, "idle_side"))
+	set_process(true)
+	set_physics_process(true)
+	# Reset HP last so HUD updates reflect the new life.
+	hp = clampi(max_hp, 0, max_hp)
+	hp_changed.emit(hp, max_hp)
+
 func _flash_damage() -> void:
 	if _animated_sprite == null:
 		return
@@ -126,6 +163,29 @@ func _flash_damage() -> void:
 	_animated_sprite.self_modulate = damage_flash_color
 	_damage_flash_tween = create_tween()
 	_damage_flash_tween.tween_property(_animated_sprite, "self_modulate", Color.WHITE, damage_flash_out_s)
+
+func _die() -> void:
+	if _is_dead:
+		return
+	_is_dead = true
+
+	# Stop player control immediately.
+	set_process(false)
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+
+	# Prevent further hits/collisions while dead.
+	collision_layer = 0
+	collision_mask = 0
+
+	# Play death animation if available.
+	if _animated_sprite and _animated_sprite.sprite_frames:
+		if _animated_sprite.sprite_frames.has_animation(death_animation_name):
+			_animated_sprite.play(death_animation_name)
+		else:
+			push_warning("Player: death animation '%s' not found in SpriteFrames." % [death_animation_name])
+
+	died.emit()
 
 func apply_knockback(knock_dir: Vector2) -> void:
 	var fallback_dir: Vector2 = -direction_to_vector.get(last_direction, Vector2.RIGHT)
