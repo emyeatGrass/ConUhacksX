@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqtia5yubgmwd"]
+
+[ext_resource type="PackedScene" uid="uid://bc7h7p2w1qrxo" path="res://scenes/player.tscn" id="1_hd1c1"]
+[ext_resource type="PackedScene" uid="uid://di837qgcnqbmv" path="res://scenes/coin_pool.tscn" id="2_c7jcs"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_hd1c1")]
+
+[node name="CoinPool" parent="." instance=ExtResource("2_c7jcs")]

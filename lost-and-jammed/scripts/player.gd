@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 @onready var _animated_sprite = $AnimatedSprite2D
+@onready var coin_pool = $"../CoinPool"
 
 const SPEED = 100.0
 var last_direction;
@@ -28,6 +29,9 @@ func _process(delta: float) -> void:
 		last_direction = "up";
 	elif Input.is_action_pressed("move_down"):
 		last_direction = "down";
+		
+	if Input.is_action_just_pressed("shoot"):
+		shoot()
 
 	if (last_direction != null):
 		var animation = direction_to_idle[last_direction] if velocity == Vector2.ZERO else direction_to_run[last_direction]
@@ -41,3 +45,11 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.move_toward(Vector2.ZERO, SPEED)
 
 	move_and_slide()
+	
+func shoot() -> void:
+	var coin = coin_pool.get_coin()
+	if coin:
+		coin.reset()
+		coin.global_position = global_position
+		coin.rotation = global_rotation
+		#audio_manager.play_gunshot()
