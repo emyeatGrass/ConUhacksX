@@ -911,7 +911,7 @@ tile_map_data = PackedByteArray("AAAGAAAAAgAGAAcAAAAGAAEAAgAGAAgAAAAHAAAAAgAHAAc
 tile_set = SubResource("TileSet_85g3d")
 
 [node name="Player" parent="Layer1" instance=ExtResource("5_tefeu")]
-position = Vector2(360, 219)
+position = Vector2(476, 498)
 scale = Vector2(1.715, 1.715)
 
 [node name="CarBlue" parent="Layer1" instance=ExtResource("4_jyhfs")]

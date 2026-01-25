@@ -48,5 +48,6 @@ func _on_body_entered(body: Node2D) -> void:
 	if player != null and body == player:
 		return
 	if body.has_method("hit_by_coin"):
+		player.call("heal_hp", 10)
 		body.call("hit_by_coin")
 	despawn()

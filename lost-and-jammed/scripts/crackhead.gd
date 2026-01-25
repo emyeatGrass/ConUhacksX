@@ -14,6 +14,7 @@ var _fleeing := false
 var _spawn_pause_left_s: float = 0.0
 var _knockback_time_left_s: float = 0.0
 var _knockback_velocity: Vector2 = Vector2.ZERO
+var _friendly := false
 
 func _ready() -> void:
 	# Only despawn after being hit (while fleeing).
@@ -72,6 +73,9 @@ func _check_player_touch() -> void:
 	# During the grace period, ignore contact entirely.
 	if _spawn_pause_left_s > 0.0:
 		return
+	# If a crackhead received a coin, it becomes friendly.
+	if _friendly:
+		return
 
 	var count := get_slide_collision_count()
 	if count <= 0:
@@ -97,6 +101,9 @@ func _check_player_touch() -> void:
 
 
 func hit_by_coin() -> void:
+	# Getting hit by a coin ends the grace period (if any) and makes the crackhead friendly.
+	_spawn_pause_left_s = 0.0
+	_friendly = true
 	_fleeing = true
 	if audio_manager and audio_manager.has_method("play_enemy_hit"):
 		audio_manager.call("play_enemy_hit")

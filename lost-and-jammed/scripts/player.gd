@@ -94,6 +94,15 @@ func take_damage(amount: int) -> void:
 	hp = new_hp
 	hp_changed.emit(hp, max_hp)
 
+func heal_hp(amount: int) -> void:
+	if amount >= max_hp:
+		return
+	var new_hp := clampi(hp + amount, 0, max_hp)
+	if new_hp == hp:
+		return
+	hp = new_hp
+	hp_changed.emit(hp, max_hp)
+
 func apply_knockback(knock_dir: Vector2) -> void:
 	var dir := knock_dir.normalized()
 	if dir == Vector2.ZERO:
