@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://dwf7rucatbne"]
+
+[ext_resource type="Script" uid="uid://diet81ijftuli" path="res://scripts/car_blue.gd" id="1_igi8u"]
+[ext_resource type="Texture2D" uid="uid://b0g5qfjlr2it4" path="res://assets/characters/CarBlue.png" id="1_nwy6m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a2782"]
+size = Vector2(47.90087, 19.825075)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_igi8u"]
+size = Vector2(56.55977, 35.568512)
+
+[node name="CarBlue" type="CharacterBody2D"]
+position = Vector2(-1, 1)
+scale = Vector2(1.715, 1.715)
+collision_layer = 4
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("1_igi8u")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(25, 13)
+texture = ExtResource("1_nwy6m")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PackedVector2Array(22, 0, 41, 0, 49, 8, 49, 20, 47, 22, 44, 22, 44, 25, 43, 26, 39, 26, 37.900875, 26.239067, 35.568512, 26.239067, 16.90962, 26.239067, 14.57726, 26.239067, 13, 26, 9, 26, 8, 25, 8, 22, 4, 22, 1, 20, 1, 11, 4, 8, 8, 8, 8, 7, 12, 7, 12, 6, 16, 6)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(25.029148, 11.661806)
+shape = SubResource("RectangleShape2D_a2782")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(11, 9)
+rect = Rect2(-10, -10, 48, 27)
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+visibility_layer = 2
+target_position = Vector2(-100, 50)
+collision_mask = 5
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(25.364426, 12.536443)
+shape = SubResource("RectangleShape2D_igi8u")
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
