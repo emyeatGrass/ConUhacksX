@@ -305,4 +305,3 @@ func _compute_union_used_rect(a: TileMapLayer, b: TileMapLayer) -> Rect2i:
 	var pos := Vector2i(int(min_x), int(min_y))
 	var size := Vector2i(int(max_x - min_x + 1), int(max_y - min_y + 1))
 	return Rect2i(pos, size)
-

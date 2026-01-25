@@ -17,6 +17,7 @@ var _objects_layer: Node
 
 var _spawn_positions_by_id: Dictionary = {}
 var _is_respawning: bool = false
+var _respawn_requested_frame: int = -1  # Frame when respawn was last requested
 
 
 func _ready() -> void:
@@ -46,7 +47,8 @@ func _ready() -> void:
 
 func _on_any_player_died_singleplayer() -> void:
 	# Legacy behavior: immediate respawn on death.
-	_on_respawn_sequence()
+	# Use deferred call to consolidate multiple death events in the same frame.
+	_request_respawn_deferred()
 
 func _on_any_player_downed() -> void:
 	# Multiplayer behavior: only respawn the run when *all* players are downed.
@@ -54,7 +56,17 @@ func _on_any_player_downed() -> void:
 		return
 	if not _all_players_downed():
 		return
-	_on_respawn_sequence()
+	# Use deferred call to consolidate multiple death events in the same frame.
+	_request_respawn_deferred()
+
+func _request_respawn_deferred() -> void:
+	# Prevent multiple respawn requests in the same frame.
+	var current_frame := Engine.get_process_frames()
+	if _respawn_requested_frame == current_frame:
+		return
+	_respawn_requested_frame = current_frame
+	# Defer the actual respawn so all death signals in this frame are processed first.
+	call_deferred("_on_respawn_sequence")
 
 func _on_respawn_sequence() -> void:
 	if _is_respawning:

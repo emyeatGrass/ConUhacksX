@@ -70,6 +70,7 @@ const direction_to_run = {
 var _revive_progress_s: float = 0.0
 var _revive_bar: ProgressBar = null
 var _screen_notifier: VisibleOnScreenNotifier2D = null
+var _revive_grace_frames: int = 0  # Grace period after revival to prevent instant screen-exit death
 
 var _move_left_action: StringName
 var _move_right_action: StringName
@@ -119,6 +120,10 @@ func _ready() -> void:
 		_animated_sprite.animation_finished.connect(_on_animated_sprite_animation_finished)
 
 func _process(delta: float) -> void:
+	# Decrement the revive grace period (allows camera to catch up before screen-exit checks).
+	if _revive_grace_frames > 0:
+		_revive_grace_frames -= 1
+	
 	if _is_downed:
 		_ensure_revive_bar()
 		_process_revive(delta)
@@ -190,6 +195,8 @@ func revive_at(spawn_global_pos: Vector2, hp_override: int = -1) -> void:
 	_attack_already_hit_by_id.clear()
 	_revive_progress_s = 0.0
 	_set_revive_ui_visible(false)
+	# Grace period to allow camera to reposition before screen-exit checks.
+	_revive_grace_frames = 5
 	if is_instance_valid(_damage_flash_tween):
 		_damage_flash_tween.kill()
 	if _animated_sprite:
@@ -241,8 +248,6 @@ func _die() -> void:
 
 	# Singleplayer keeps the legacy "died" signal semantics.
 	if not _is_multiplayer():
-		if audio_manager != null and audio_manager.has_method("play_game_over"):
-			audio_manager.call("play_game_over")
 		set_process(false)
 		died.emit()
 		return
@@ -497,6 +502,10 @@ func _ensure_screen_notifier() -> void:
 func _on_screen_exited() -> void:
 	# If the player leaves the camera view, they are considered dead/downed.
 	if _is_downed:
+		return
+	
+	# Grace period after revival to allow camera to reposition.
+	if _revive_grace_frames > 0:
 		return
 
 	if _is_multiplayer():
