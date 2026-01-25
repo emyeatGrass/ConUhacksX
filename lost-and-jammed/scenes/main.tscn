@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b2418ug06duow"]
+[gd_scene load_steps=14 format=3 uid="uid://b2418ug06duow"]
 
 [ext_resource type="Texture2D" uid="uid://cefc2w3cgs2eq" path="res://assets/tilesets/CP_V1.0.4.png" id="1_sugp2"]
 [ext_resource type="Texture2D" uid="uid://cisnpfd6jeyta" path="res://assets/tilesets/plains.png" id="2_jyhfs"]
@@ -911,13 +911,13 @@ scale = Vector2(1.715, 1.715)
 [node name="AudioManager" parent="." instance=ExtResource("9_audio")]
 
 [node name="Crackhead" parent="." instance=ExtResource("7_crack")]
-position = Vector2(252, 140)
+position = Vector2(703, 351)
 
 [node name="Crackhead2" parent="." instance=ExtResource("7_crack")]
-position = Vector2(252, 64)
+position = Vector2(97, 111)
 
 [node name="Crackhead3" parent="." instance=ExtResource("7_crack")]
-position = Vector2(252, 102)
+position = Vector2(138, 353)
 
 [node name="SpawnManager" type="Node2D" parent="."]
 script = ExtResource("6_o6xl0")
