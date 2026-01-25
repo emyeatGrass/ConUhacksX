@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxfk87d4evfk3"]
+
+[ext_resource type="Script" uid="uid://bj1wcpkyef50q" path="res://scripts/audio_manager.gd" id="1_liach"]
+[ext_resource type="AudioStream" uid="uid://c8yvuvb4w0ctt" path="res://sfx/coinfling.wav" id="2_3asnw"]
+[ext_resource type="AudioStream" uid="uid://c6p2n1hy057da" path="res://sfx/thankyou.wav" id="3_3asnw"]
+
+[node name="AudioManager" type="Node"]
+script = ExtResource("1_liach")
+coin_fling_sounds = Array[AudioStream]([ExtResource("2_3asnw")])
+enemy_hit_sounds = Array[AudioStream]([ExtResource("3_3asnw")])

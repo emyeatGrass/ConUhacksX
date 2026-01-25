@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 @onready var _animated_sprite = $AnimatedSprite2D
 @onready var coin_pool = $"../CoinPool"
+@onready var audio_manager: Node = get_node_or_null("../AudioManager")
 
 const SPEED = 100.0
 var last_direction;
@@ -60,4 +61,5 @@ func shoot() -> void:
 		# Spawn a bit in front so it doesn't collide with the player instantly.
 		coin.global_position = global_position + aim_dir * 12.0
 		coin.global_rotation = aim_dir.angle()
-		#audio_manager.play_gunshot()
+		if audio_manager and audio_manager.has_method("play_coin_fling"):
+			audio_manager.call("play_coin_fling")

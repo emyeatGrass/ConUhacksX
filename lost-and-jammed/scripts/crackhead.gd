@@ -5,6 +5,7 @@ extends CharacterBody2D
 
 @onready var player: Node2D = get_node_or_null("/root/World/Player")
 @onready var _screen_notifier: VisibleOnScreenNotifier2D = $VisibleOnScreenNotifier2D
+@onready var audio_manager: Node = get_node_or_null("/root/World/AudioManager")
 
 var _fleeing := false
 
@@ -31,6 +32,8 @@ func _physics_process(_delta: float) -> void:
 
 func hit_by_coin() -> void:
 	_fleeing = true
+	if audio_manager and audio_manager.has_method("play_enemy_hit"):
+		audio_manager.call("play_enemy_hit")
 
 
 func _on_screen_exited() -> void:
