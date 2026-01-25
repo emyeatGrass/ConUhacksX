@@ -18,7 +18,7 @@ var _attack_dir: Vector2 = Vector2.RIGHT
 var _attack_already_hit_by_id: Dictionary = {}
 
 var _crackhead_scene: PackedScene = preload("res://scenes/crackhead.tscn")
-@export var knockback_distance_px: float = 96.0
+@export var knockback_distance_px: float = 64.0
 @export var knockback_duration_s: float = 0.15
 var _knockback_time_left_s: float = 0.0
 var _knockback_velocity: Vector2 = Vector2.ZERO
@@ -79,9 +79,9 @@ func _process(_delta: float) -> void:
 func apply_knockback(knock_dir: Vector2) -> void:
 	var dir := knock_dir.normalized()
 	if dir == Vector2.ZERO:
-		dir = -velocity.normalized()
+		dir = - velocity.normalized()
 	if dir == Vector2.ZERO:
-		dir = -direction_to_vector.get(last_direction, Vector2.RIGHT)
+		dir = - direction_to_vector.get(last_direction, Vector2.RIGHT)
 
 	_knockback_time_left_s = knockback_duration_s
 	_knockback_velocity = dir * (knockback_distance_px / max(knockback_duration_s, 0.001))
