@@ -1,0 +1,14 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output = "../generated/prisma/client"
+}
+
+model FoundItem {
+    id Int @id @default(autoincrement())
+    image Bytes
+    descriptions String
+}

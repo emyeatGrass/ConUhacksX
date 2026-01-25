@@ -241,6 +241,8 @@ func _die() -> void:
 
 	# Singleplayer keeps the legacy "died" signal semantics.
 	if not _is_multiplayer():
+		if audio_manager != null and audio_manager.has_method("play_game_over"):
+			audio_manager.call("play_game_over")
 		set_process(false)
 		died.emit()
 		return
