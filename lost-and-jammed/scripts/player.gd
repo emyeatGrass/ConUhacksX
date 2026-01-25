@@ -163,6 +163,8 @@ func _start_attack() -> void:
 			_animated_sprite.play("attack_down")
 		_:
 			_animated_sprite.play("attack_side")
+	if audio_manager and audio_manager.has_method("play_sword_attack"):
+		audio_manager.call("play_sword_attack")
 
 
 func _do_sword_hit(attack_dir: Vector2) -> void:

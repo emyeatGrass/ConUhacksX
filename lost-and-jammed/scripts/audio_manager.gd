@@ -5,6 +5,7 @@ extends Node
 # Assign these in the Inspector.
 @export var coin_fling_sounds: Array[AudioStream] = []
 @export var enemy_hit_sounds: Array[AudioStream] = []
+@export var sword_attack_sounds: Array[AudioStream] = []
 
 var _audio_pool: Array[AudioStreamPlayer] = []
 
@@ -36,7 +37,10 @@ func play_coin_fling() -> void:
 
 
 func play_enemy_hit() -> void:
-	play_sound(enemy_hit_sounds, 0.95, 1.05)
+	play_sound(enemy_hit_sounds, 0.9, 1.1)
+	
+func play_sword_attack() -> void:
+	play_sound(sword_attack_sounds)
 
 
 func _play_on(
