@@ -11,6 +11,10 @@ signal hp_changed(hp: int, max_hp: int)
 @export var max_hp: int = 100
 var hp: int = 100
 
+@export var damage_flash_color: Color = Color(1.0, 0.2, 0.2, 1.0)
+@export var damage_flash_out_s: float = 0.12
+var _damage_flash_tween: Tween
+
 const SPEED = 100.0
 var last_direction;
 var _is_attacking := false
@@ -96,6 +100,9 @@ func take_damage(amount: int) -> void:
 		return
 	hp = new_hp
 	hp_changed.emit(hp, max_hp)
+	if audio_manager and audio_manager.has_method("play_player_hurt"):
+		audio_manager.call("play_player_hurt")
+	_flash_damage()
 
 func heal_hp(amount: int) -> void:
 	if amount <= 0:
@@ -107,6 +114,18 @@ func heal_hp(amount: int) -> void:
 		return
 	hp = new_hp
 	hp_changed.emit(hp, max_hp)
+
+func _flash_damage() -> void:
+	if _animated_sprite == null:
+		return
+
+	# Restart flash cleanly if we get hit again mid-flash.
+	if is_instance_valid(_damage_flash_tween):
+		_damage_flash_tween.kill()
+
+	_animated_sprite.self_modulate = damage_flash_color
+	_damage_flash_tween = create_tween()
+	_damage_flash_tween.tween_property(_animated_sprite, "self_modulate", Color.WHITE, damage_flash_out_s)
 
 func apply_knockback(knock_dir: Vector2) -> void:
 	var fallback_dir: Vector2 = -direction_to_vector.get(last_direction, Vector2.RIGHT)
