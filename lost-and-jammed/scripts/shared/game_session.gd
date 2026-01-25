@@ -20,4 +20,3 @@ func set_multiplayer() -> void:
 
 func is_multiplayer() -> bool:
 	return mode == GameMode.MULTIPLAYER
-

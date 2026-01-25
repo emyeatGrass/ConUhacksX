@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     console.log("ID: " + aiResponse2);
     if (aiResponse2) {
       try {
-        deletedRecord = await prisma.foundItem.findFirst({where: { id: aiResponse2 }, select: { image: true }});
+        deletedRecord = await prisma.foundItem.delete({where: { id: aiResponse2 }, select: { image: true }});
       } catch (dbError) {
         console.error("Database Delete Failed:", dbError);
       }

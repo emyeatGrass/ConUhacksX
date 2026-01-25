@@ -70,4 +70,3 @@ static func compute_knockback_velocity(
 		dir = default_dir
 
 	return dir * (distance_px / max(duration_s, 0.001))
-
