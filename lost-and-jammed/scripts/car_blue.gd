@@ -2,37 +2,37 @@ extends CharacterBody2D
 
 @export var base_speed = 400.0
 var current_speed = 0.0
-var direction = -1 # (left)
-var should_flip = false
+var direction = -1 
+var should_flip = false;
 
 @onready var sprite = $Sprite2D
 @onready var ray = $RayCast2D
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	current_speed = base_speed
-	sprite.flip_h = should_flip
-	ray.target_position.x = abs(ray.target_position.x) * direction
+	if direction == 1:
+		sprite.flip_h = true
+	ray.set_collision_mask_value(2, false) 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float):
+func _physics_process(delta: float) -> void:
 	if ray.is_colliding():
 		var collider = ray.get_collider()
-		# If we hit another car, match its speed
-		if collider is CharacterBody2D and collider != self:
+		# Ensure we don't brake for the player accidentally
+		if collider is CharacterBody2D and collider != self and not collider.is_in_group("Player"):
 			current_speed = lerp(current_speed, collider.velocity.length(), 0.1)
 	else:
-		# No car in front? Accelerate back to base speed
 		current_speed = lerp(current_speed, base_speed, 0.05)
-
+		
 	velocity.x = current_speed * direction
+	velocity.y = 0 
 	move_and_slide()
 
+# Deletes car when it leaves the screen
 func _on_visible_on_screen_notifier_2d_screen_exited():
-	queue_free() # Replace with function body.
+	queue_free()
 
-
+# Detects when the player is "squashed" or hit
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		print("Player was hit!")
-		# body.die() or get_tree().reload_current_scene()
+		# You can add: body.take_damage() or get_tree().reload_current_scene()
