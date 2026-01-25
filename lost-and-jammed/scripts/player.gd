@@ -65,10 +65,11 @@ const direction_to_run = {
 }
 
 @export var revive_duration_s: float = 5.0
-@export var revive_distance_px: float = 14.0
+@export var revive_distance_px: float = 20.0
 @export var revive_hp_fraction: float = 0.5
 var _revive_progress_s: float = 0.0
 var _revive_bar: ProgressBar = null
+var _screen_notifier: VisibleOnScreenNotifier2D = null
 
 var _move_left_action: StringName
 var _move_right_action: StringName
@@ -107,6 +108,7 @@ func _ready() -> void:
 	_base_collision_mask = int(collision_mask)
 
 	_ensure_player_tag()
+	_ensure_screen_notifier()
 
 	# Ensure we always have a facing direction.
 	if last_direction == null:
@@ -471,8 +473,37 @@ func _ensure_player_tag() -> void:
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.position = Vector2(-12, -42)
 	label.size = Vector2(24, 16)
-	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_font_size_override("font_size", 12)
 	add_child(label)
+
+func _ensure_screen_notifier() -> void:
+	if _screen_notifier != null:
+		return
+	var n := get_node_or_null(^"ScreenNotifier")
+	if n is VisibleOnScreenNotifier2D:
+		_screen_notifier = n
+	else:
+		_screen_notifier = VisibleOnScreenNotifier2D.new()
+		_screen_notifier.name = "ScreenNotifier"
+		# Small rect around the player so it counts as "on screen" while visible.
+		_screen_notifier.rect = Rect2(-8, -8, 16, 16)
+		add_child(_screen_notifier)
+
+	if not _screen_notifier.screen_exited.is_connected(_on_screen_exited):
+		_screen_notifier.screen_exited.connect(_on_screen_exited)
+
+func _on_screen_exited() -> void:
+	# If the player leaves the camera view, they are considered dead/downed.
+	if _is_downed:
+		return
+
+	if _is_multiplayer():
+		var cam := get_viewport().get_camera_2d()
+		if cam != null:
+			# Move the downed body to the middle of the screen.
+			global_position = cam.get_screen_center_position()
+
+	_die()
 
 func _ensure_revive_bar() -> void:
 	if _revive_bar != null:

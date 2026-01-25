@@ -5,6 +5,7 @@ extends Control
 
 func _ready() -> void:
 	if _single_btn:
+		_single_btn.grab_focus()
 		_single_btn.pressed.connect(_on_single_pressed)
 	if _multi_btn:
 		_multi_btn.pressed.connect(_on_multi_pressed)

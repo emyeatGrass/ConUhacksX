@@ -11,6 +11,24 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
 
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06, 0.07, 0.1, 1)
+
+[node name="BackgroundGlow" type="ColorRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.12, 0.1, 0.2, 0.35)
+
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -20,7 +38,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(420, 220)
+custom_minimum_size = Vector2(480, 260)
 
 [node name="VBox" type="VBoxContainer" parent="CenterContainer/Panel"]
 theme_override_constants/separation = 14
@@ -35,14 +53,22 @@ text = "Choose a mode"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 18
 
+[node name="Hint" type="Label" parent="CenterContainer/Panel/VBox"]
+text = "P1: Arrow keys + Num0/Del | P2: WASD + Space/Tab"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 14
+modulate = Color(1, 1, 1, 0.75)
+
 [node name="Spacer" type="Control" parent="CenterContainer/Panel/VBox"]
 custom_minimum_size = Vector2(0, 8)
 
 [node name="SingleplayerButton" type="Button" parent="CenterContainer/Panel/VBox"]
 unique_name_in_owner = true
 text = "Singleplayer"
+focus_mode = 2
 
 [node name="MultiplayerButton" type="Button" parent="CenterContainer/Panel/VBox"]
 unique_name_in_owner = true
 text = "2 Player Co-op"
+focus_mode = 2
 
