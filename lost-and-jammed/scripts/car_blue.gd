@@ -3,13 +3,16 @@ extends CharacterBody2D
 @export var base_speed = 200.0
 var current_speed = 0.0
 var direction = -1 # (left)
+var should_flip = false
 
+@onready var sprite = $Sprite2D
 @onready var ray = $RayCast2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	ray.target_position.x = 100 * direction
 	current_speed = base_speed
+	sprite.flip_h = should_flip
+	ray.target_position.x = abs(ray.target_position.x) * direction
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):

@@ -35,14 +35,16 @@ func _on_timer_timeout() -> void:
 	
 	# 3. Create the car
 	var car = car_scene.instantiate()
-	add_child(car)
 	
 	# 4. Position it and set direction
 	car.global_position = random_marker.global_position
 	
 	if spawn_group == "RightBound":
 		car.direction = -1 # Move left
-		car.rotation_degrees = 0 # Face left
+		car.should_flip = false
 	else:
 		car.direction = 1  # Move right
-		car.rotation_degrees = 180 # Flip the car sprite to face right
+		car.should_flip = true
+	
+	add_child(car)
+	car.global_position = random_marker.global_position
