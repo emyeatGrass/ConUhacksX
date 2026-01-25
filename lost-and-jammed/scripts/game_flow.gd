@@ -10,6 +10,7 @@ const GameServices = preload("res://scripts/shared/game_services.gd")
 var _players: Array[Node2D] = []
 var _hud: Node
 var _coin_pool: Node
+var _audio_manager: Node
 var _spawn_manager: Node
 var _map_regen: Node
 var _objects_layer: Node
@@ -21,6 +22,7 @@ var _is_respawning: bool = false
 func _ready() -> void:
 	_hud = GameServices.get_hud(get_tree())
 	_coin_pool = GameServices.get_coin_pool(get_tree())
+	_audio_manager = GameServices.get_audio_manager(get_tree())
 	_spawn_manager = get_node_or_null(spawn_manager_path)
 	_map_regen = get_node_or_null(map_regenerator_path)
 	_objects_layer = get_node_or_null(objects_layer_path)
@@ -71,6 +73,8 @@ func _on_respawn_sequence() -> void:
 		_coin_pool.call("despawn_all")
 
 	# Show gray overlay.
+	if _audio_manager != null and _audio_manager.has_method("play_game_over"):
+		_audio_manager.call("play_game_over")
 	if _hud != null and _hud.has_method("show_death_overlay"):
 		_hud.call("show_death_overlay", true)
 
