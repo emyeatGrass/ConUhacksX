@@ -221,6 +221,8 @@ func _do_sword_hit(attack_dir: Vector2) -> void:
 
 		if parent != null and _crackhead_scene != null:
 			var crackhead := _crackhead_scene.instantiate()
+			# Give the player time to react before the crackhead starts moving.
+			(crackhead as Node).set("spawn_pause_s", 2.0)
 			(parent as Node).add_child(crackhead)
 			(crackhead as Node2D).global_position = hit_pos
 

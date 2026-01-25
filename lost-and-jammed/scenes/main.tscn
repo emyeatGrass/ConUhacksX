@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://mbfkkcxfd8fm" path="res://scripts/spawn_manager.gd" id="6_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://di837qgcnqbmv" path="res://scenes/coin_pool.tscn" id="8_coinpool"]
 [ext_resource type="PackedScene" uid="uid://cxfk87d4evfk3" path="res://scenes/audio_manager.tscn" id="9_audio"]
-[ext_resource type="PackedScene" uid="uid://c7n3h2k9p1x4v" path="res://scenes/hud.tscn" id="10_hud"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="10_hud"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tefeu"]
 texture = ExtResource("1_sugp2")

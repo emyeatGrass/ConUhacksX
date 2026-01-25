@@ -4,18 +4,27 @@ extends CharacterBody2D
 @export var flee_speed := 80.0
 @export var knockback_distance_px: float = 96.0
 @export var knockback_duration_s: float = 0.15
+@export var spawn_pause_s: float = 0.0: set = _set_spawn_pause_s
 
 @onready var player: Node2D = get_tree().get_first_node_in_group("Player") as Node2D
 @onready var _screen_notifier: VisibleOnScreenNotifier2D = $VisibleOnScreenNotifier2D
 @onready var audio_manager: Node = get_node_or_null("/root/World/AudioManager")
 
 var _fleeing := false
+var _spawn_pause_left_s: float = 0.0
 var _knockback_time_left_s: float = 0.0
 var _knockback_velocity: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	# Only despawn after being hit (while fleeing).
 	_screen_notifier.screen_exited.connect(_on_screen_exited)
+	_spawn_pause_left_s = maxf(spawn_pause_s, 0.0)
+
+
+func _set_spawn_pause_s(value: float) -> void:
+	spawn_pause_s = maxf(value, 0.0)
+	# If this is set after spawning/ready, still apply it immediately.
+	_spawn_pause_left_s = maxf(spawn_pause_s, _spawn_pause_left_s)
 
 func apply_knockback(knock_dir: Vector2) -> void:
 	var dir := knock_dir.normalized()
@@ -38,6 +47,13 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
+	if _spawn_pause_left_s > 0.0:
+		_spawn_pause_left_s = maxf(_spawn_pause_left_s - delta, 0.0)
+		velocity = Vector2.ZERO
+		move_and_slide()
+		# Grace period: touching the player does nothing.
+		return
+
 	var direction: Vector2
 	if _fleeing:
 		# Move away from the player.
@@ -53,6 +69,10 @@ func _physics_process(delta: float) -> void:
 
 
 func _check_player_touch() -> void:
+	# During the grace period, ignore contact entirely.
+	if _spawn_pause_left_s > 0.0:
+		return
+
 	var count := get_slide_collision_count()
 	if count <= 0:
 		return
