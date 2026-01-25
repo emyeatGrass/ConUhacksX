@@ -8,6 +8,7 @@ extends Node
 @export var sword_attack_sounds: Array[AudioStream] = []
 @export var explosion_sounds: Array[AudioStream] = []
 @export var player_hurt_sounds: Array[AudioStream] = []
+@export var game_over_sound: Array[AudioStream] = []
 
 var _audio_pool: Array[AudioStreamPlayer] = []
 
@@ -49,6 +50,9 @@ func play_explosion() -> void:
 
 func play_player_hurt() -> void:
 	play_sound(player_hurt_sounds, 0.8, 1.2)
+
+func play_game_over() -> void:
+	play_sound(game_over_sound)
 
 
 func _play_on(
