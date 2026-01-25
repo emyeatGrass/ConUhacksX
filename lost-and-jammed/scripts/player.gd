@@ -5,6 +5,12 @@ extends CharacterBody2D
 
 const SPEED = 100.0
 var last_direction;
+const direction_to_vector := {
+	"right": Vector2.RIGHT,
+	"left": Vector2.LEFT,
+	"up": Vector2.UP,
+	"down": Vector2.DOWN,
+}
 const direction_to_idle = {
 	"right": "idle_side",
 	"left": "idle_side",
@@ -18,7 +24,7 @@ const direction_to_run = {
 	"down": "run_down"
 }
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_pressed("move_right"):
 		last_direction = "right";
 		_animated_sprite.flip_h = false;
@@ -37,7 +43,7 @@ func _process(delta: float) -> void:
 		var animation = direction_to_idle[last_direction] if velocity == Vector2.ZERO else direction_to_run[last_direction]
 		_animated_sprite.play(animation);
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if direction:
 		velocity = direction * SPEED
@@ -51,5 +57,6 @@ func shoot() -> void:
 	if coin:
 		coin.reset()
 		coin.global_position = global_position
-		coin.rotation = global_rotation
+		var aim_dir: Vector2 = direction_to_vector.get(last_direction, Vector2.RIGHT)
+		coin.global_rotation = aim_dir.angle()
 		#audio_manager.play_gunshot()

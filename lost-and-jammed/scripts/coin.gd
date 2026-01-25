@@ -1,6 +1,6 @@
 extends Area2D
 
-const SPEED = 800.0
+const SPEED = 200.0
 
 @onready var _animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var _screen_notifier: VisibleOnScreenNotifier2D = $VisibleOnScreenNotifier2D
