@@ -13,10 +13,7 @@ ConUHacks gave us two challenges that seem unrelated at first, but both center o
 1. **Upload a photo** of the item (add or find).
 2. **AI turns the image into searchable descriptors** (object name, synonyms, colour, shape, brand, key attributes...).
 3. **We search a private database inventory**:
-   - Fast candidate retrieval using word overlap between query and stored descriptions:
-     \[
-     \text{overlap}(Q, D) = \sum_{w \in \text{tokens}(Q)} \mathbf{1}[w \in \text{tokens}(D)]
-     \]
+   - Fast candidate retrieval using word overlap between query and stored descriptions.
    - Then a refinement step compares the query image against the top candidate images to pick the best match.
 4. **If a match is confirmed**, the matched item is revealed and the **embedded HTML5 game** starts.
 5. **Beat the level to reclaim your item**.
