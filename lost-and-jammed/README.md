@@ -1,5 +1,5 @@
 #### Try it here: https://lost-and-jammed.vercel.app
-##### The database (found inventory) already contains 25 different items. Download them and sample test images, or add and fetch your own items to and from the found inventory. Refreshing or reopening the page resets the user's database.
+##### The database (found inventory) already contains 25 different items. Download them and the sample test images, or add and fetch your own items to and from the found inventory. Each tab has its own database; refreshing or reopening the page resets it.
 
 ## About the project
 
@@ -10,14 +10,12 @@ ConUHacks gave us two challenges that seem unrelated at first, but both center o
 **Lost&Jammed** is a web app with an integrated game:
 
 - **Lost-and-found matching**: Users upload a clear photo to deposit a found item into a private inventory, or upload a photo of a lost item in the hope of finding a match.
-- (Skippable) **Playable retrieval quest**: When a strong match is found, the website launches our **Godot HTML5 game directly in-page** (only on desktop), turning the pickup into an interactive adventure where the user needs to fetch their item in the game, located north of several dangerous highways to be crossed.
+- (Skippable) **Playable retrieval quest**: When a strong match is found, the website launches our **Godot HTML5 game directly in-page** (only on desktop), turning the pickup into an interactive adventure where the user needs to fetch their item in the game, located north of several dangerous highways jammed with cars to be crossed.
 
 ### How it works
 1. **Upload a photo** of the item (add or find).
 2. **AI turns the image into searchable descriptors** (object name, synonyms, colour, shape, brand, key attributes...).
-3. **We search a private database inventory**:
-   - Fast candidate retrieval using word overlap between query and stored descriptions.
-   - Then a refinement step compares the query image against the top candidate images to pick the best match.
+3. **We search a private database inventory**. Then a refinement step compares the query image against the top candidate images to pick the best match.
 4. **If a match is confirmed**, the matched item is revealed and the **embedded HTML5 game** starts.
 5. **Beat the level to reclaim your item**.
 
