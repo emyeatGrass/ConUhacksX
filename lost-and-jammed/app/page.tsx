@@ -14,6 +14,7 @@ const SearchIcon = () => (
 );
 
 export default function Home() {
+  const [sessionId] = useState(() => crypto.randomUUID());
   const [response, setResponse] = useState('');
   const [returnedImage, setReturnedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +79,7 @@ export default function Home() {
           const res = await fetch('/api/generate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: compressedBase64, mimeType: 'image/jpeg', isAdding }),
+            body: JSON.stringify({ image: compressedBase64, mimeType: 'image/jpeg', isAdding, sessionId }),
           });
 
           const data = await res.json();
@@ -128,7 +129,19 @@ export default function Home() {
   const dragBorder = isAdding ? 'border-sky-500 bg-sky-50 dark:bg-sky-900/20' : 'border-orange-500 bg-orange-50 dark:bg-orange-900/20';
 
   return (
-    <main className={`min-h-screen flex flex-col items-center pt-12 p-6 relative overflow-x-hidden transition-colors duration-700 ${isAdding ? 'bg-slate-50 dark:bg-slate-950' : 'bg-orange-50/30 dark:bg-zinc-950'}`}>
+    <main className={`min-h-screen flex flex-col items-center pt-4 p-6 relative overflow-x-hidden transition-colors duration-700 ${isAdding ? 'bg-slate-50 dark:bg-slate-950' : 'bg-orange-50/30 dark:bg-zinc-950'}`}>
+      <div className="z-20 mb-2">
+        <a 
+          href="/Sample_Pictures.zip"
+          download="Sample_Pictures.zip"
+          className="group flex items-center gap-1 px-2 py-1.5 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-full text-[10px] font-bold text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-all hover:shadow-lg active:scale-95"
+        >
+          <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a2 2 0 002 2h12 a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Download: Default Database Images & Test Images
+        </a>
+      </div>
 
       <div className="z-10 w-full max-w-md flex flex-col gap-6">
         
@@ -191,9 +204,9 @@ export default function Home() {
               <input 
                 type="file" 
                 accept="image/*" 
-                onChange={(e) => e.target.files && processFile(e.target.files[0])} 
+                onChange={(e) => {if (e.target.files && e.target.files[0]) {processFile(e.target.files[0]); e.target.value = '';}}} 
                 disabled={isLoading} 
-                className="hidden" 
+                className="hidden"
               />
             </label>
             
@@ -222,7 +235,7 @@ export default function Home() {
             <div className="relative">
               <div className="relative bg-white dark:bg-zinc-900 rounded-2xl p-2 shadow-xl ring-1 ring-zinc-200 dark:ring-zinc-800">
                  <div className="flex items-center justify-between px-2 py-2 mb-1 text-center">
-                    <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest w-full">COME BY AND PICK IT UP!</span>
+                    <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest w-full">FOUND AND REMOVED!</span>
                  </div>
                  
                  <div className="aspect-square w-56 mx-auto bg-zinc-100 dark:bg-zinc-800 relative rounded-xl">
