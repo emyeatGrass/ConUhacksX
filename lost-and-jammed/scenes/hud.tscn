@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c7n3h2lap1x4v"]
 
-[ext_resource type="Script" uid="uid://h3althbar0uid" path="res://scripts/hud.gd" id="1_hud"]
+[ext_resource type="Script" uid="uid://dgundgrnl3yt" path="res://scripts/hud.gd" id="1_hud"]
 
 [node name="HUD" type="CanvasLayer" groups=["HUD"]]
 layer = 10
@@ -8,41 +8,63 @@ script = ExtResource("1_hud")
 
 [node name="DeathOverlay" type="ColorRect" parent="."]
 visible = false
-anchor_left = 0.0
-anchor_top = 0.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
 color = Color(0.5, 0.5, 0.5, 0.55)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-anchor_left = 0.0
+anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 0.0
 offset_top = -48.0
-offset_right = 0.0
-offset_bottom = 0.0
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
-
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
-text = "HP"
-
-[node name="HealthBar" type="ProgressBar" parent="MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 18)
+[node name="PlayersHBox" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
 size_flags_horizontal = 3
-show_percentage = false
-value = 100.0
+theme_override_constants/separation = 18
 
-[node name="ValueLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="P1" type="HBoxContainer" parent="MarginContainer/PlayersHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="MarginContainer/PlayersHBox/P1"]
+layout_mode = 2
+text = "P1"
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/PlayersHBox/P1"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+show_percentage = false
+
+[node name="ValueLabel" type="Label" parent="MarginContainer/PlayersHBox/P1"]
+layout_mode = 2
 text = "100/100"
 
+[node name="P2" type="HBoxContainer" parent="MarginContainer/PlayersHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="MarginContainer/PlayersHBox/P2"]
+layout_mode = 2
+text = "P2"
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/PlayersHBox/P2"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+show_percentage = false
+
+[node name="ValueLabel" type="Label" parent="MarginContainer/PlayersHBox/P2"]
+layout_mode = 2
+text = "100/100"

@@ -230,9 +230,6 @@ export default function Home() {
                    {showGame && (
                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] z-50 bg-zinc-950 flex flex-col items-center justify-start rounded-xl shadow-2xl animate-in fade-in duration-300 border border-zinc-800">
                        <div className="w-full h-full bg-black relative flex items-center justify-center rounded-xl overflow-hidden">
-                         <span className="text-zinc-500 font-mono text-[10px] tracking-widest animate-pulse">
-                           GAME LOADING...
-                         </span>
                          
                          {/* SKIP BUTTON */}
                          <button 
@@ -242,7 +239,7 @@ export default function Home() {
                            Skip {'>>'}
                          </button>
                          
-                         {/* <iframe src="/game/index.html" className="w-full h-full" /> */}
+                         <iframe src="/game/index.html" className="w-full h-full" />
                        </div>
                      </div>
                    )}

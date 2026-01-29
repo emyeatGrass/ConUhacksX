@@ -7,6 +7,8 @@ const SPEED = 200.0
 @onready var _animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var _screen_notifier: VisibleOnScreenNotifier2D = $VisibleOnScreenNotifier2D
 
+var owner_player: Node2D = null
+
 func _ready() -> void:
 	set_deferred("monitoring", false)
 	# Return to pool when the coin leaves the visible screen.
@@ -27,6 +29,7 @@ func reset() -> void:
 	set_deferred("monitoring", true)
 	set_physics_process(true)
 	_animated_sprite.play()
+	owner_player = null
 
 
 func despawn() -> void:
@@ -34,6 +37,7 @@ func despawn() -> void:
 	set_deferred("monitoring", false)
 	set_physics_process(false)
 	_animated_sprite.stop()
+	owner_player = null
 
 
 func _on_screen_exited() -> void:
@@ -42,10 +46,9 @@ func _on_screen_exited() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	# Coins are pooled: "hidden" == "available", because we are too tired to free/instance.
-	# Also: ignore hitting the player immediately on spawn to avoid self-bonking.
-	var player := GameServices.get_player(get_tree())
-	if player != null and body == player:
+	# Ignore hitting the shooter to avoid self-bonking (especially important in multiplayer).
+	if owner_player != null and body == owner_player:
 		return
 	if body.has_method("hit_by_coin"):
-		body.call("hit_by_coin")
+		body.call("hit_by_coin", owner_player)
 	despawn()
