@@ -7,7 +7,7 @@
 ConUHacks gave us two challenges that seem unrelated at first, but both center on the same idea: getting an item back. We wanted to merge them into one coherent experience. First, a powerful, AI-powered lost-and-found system. Then, a top-down shooter game where recovering your item becomes a short quest.
 
 ### What we built
-**Lost&Jammed** is a web app with an integrated game:
+**Lost & Jammed** is a web app with an integrated game:
 
 - **Lost-and-found matching**: Users upload a clear photo to deposit a found item into a private inventory, or upload a photo of a lost item in the hope of finding a match.
 - (Skippable) **Playable retrieval quest**: When a strong match is found, the website launches our **Godot HTML5 game directly in-page** (only on desktop), turning the pickup into an interactive adventure where the user needs to fetch their item in the game, located north of several dangerous highways jammed with cars to be crossed.
