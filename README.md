@@ -1,4 +1,5 @@
-https://lost-and-jammed.vercel.app
+#### Try it here: https://lost-and-jammed.vercel.app
+##### The database (found inventory) already contains 25 different items. Download them and sample test images, or add and fetch your own items to and from the found inventory. Refreshing or reopening the page resets the user's database.
 
 ## About the project
 
