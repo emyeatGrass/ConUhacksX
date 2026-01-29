@@ -222,7 +222,7 @@ export default function Home() {
             <div className="relative">
               <div className="relative bg-white dark:bg-zinc-900 rounded-2xl p-2 shadow-xl ring-1 ring-zinc-200 dark:ring-zinc-800">
                  <div className="flex items-center justify-between px-2 py-2 mb-1 text-center">
-                    <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest w-full">COME BY TO PICK IT UP!</span>
+                    <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest w-full">COME BY AND PICK IT UP!</span>
                  </div>
                  
                  <div className="aspect-square w-56 mx-auto bg-zinc-100 dark:bg-zinc-800 relative rounded-xl">
