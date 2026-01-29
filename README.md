@@ -10,7 +10,7 @@ ConUHacks gave us two challenges that seem unrelated at first, but both center o
 **Lost & Jammed** is a web app with an integrated game:
 
 - **Lost-and-found matching**: Users upload a clear photo to deposit a found item into a private inventory, or upload a photo of a lost item in the hope of finding a match. The app is fully intelligent and autonomous: no admin required to operate the lost-and-found.
-- (Skippable) **Playable retrieval quest**: When a strong match is found, the website launches our **Godot HTML5 game directly in-page** (only on desktop), turning the pickup into an interactive adventure where the user needs to fetch their item in the game, located north of several dangerous highways jammed with cars to be crossed.
+- (Skippable) **Playable retrieval quest**: When a strong match is found, the website launches our **Godot HTML5 game directly in-page** (only on desktop with extended keyboard), turning the pickup into an interactive adventure where the user needs to fetch their item in the game, located north of several dangerous highways jammed with cars to be crossed.
 
 ### How it works
 1. **Upload a photo** of the item (add or find).
