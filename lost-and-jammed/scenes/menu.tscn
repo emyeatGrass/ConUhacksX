@@ -145,7 +145,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.494, 0.918, 1, 0.6)
 theme_override_font_sizes/font_size = 14
-text = "P1: Arrow keys + Num0/Del | P2: WASD + Space/Tab"
+text = "P1: Arrow keys + O/P | P2: WASD + C/V"
 horizontal_alignment = 1
 
 [node name="Spacer" type="Control" parent="CenterContainer/Panel/VBox"]
